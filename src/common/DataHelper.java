@@ -41,31 +41,58 @@ public class DataHelper {
 	}
 	
 	/**
-	 * 获取所有失效测试用例集
-	 * @param tcasFailtestFileName
+	 * 获取保存布尔表达式的MFS的文件夹
+	 * @return
+	 */
+	public String getTcasMfsPath() {
+		return tcasMfsPath;
+	}
+
+	/**
+	 * 获取所有失效测试用例集或者MFS
+	 * @param tcasFailtestOfMfsFileName 如果mfs文件名，那么需要根据这个文件名获取对应的ftc文件名，从而获取valuesOfEachParam
+	 * @param isGetAllFtcs 如果为true，则读取ftcs，否则读取mfs
 	 * @return
 	 * @throws IOException 
 	 */
-	public List<int[]> getAllFtcs(String tcasFailtestFileName) throws IOException {
-		File f = new File(this.tcasFailtestPath+tcasFailtestFileName);
+	public List<int[]> getAllFtcsOrMfs(String tcasFailtestOfMfsFileName, boolean isGetAllFtcs) throws IOException {
+		List<int[]> allFtcsOfMfs = new ArrayList<int[]>();
+		int[] valuesOfEachParam = getValuesOfEachParam(tcasFailtestOfMfsFileName.split("_")[0]+".txt");	
+		int itemsOfLine = 1;		//考虑一行有多个item的情况
+		
+		File f = new File((isGetAllFtcs ? tcasFailtestPath : tcasMfsPath)+tcasFailtestOfMfsFileName);
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "utf-8"));
 		String line = br.readLine();
+		String oneItem = null;
 		while (line != null) {
 			if (!line.isEmpty()) {	//考虑了空行这种情况
-				
+				itemsOfLine = line.length() / valuesOfEachParam.length;
+				for (int i = 0; i < itemsOfLine; i++) {
+					oneItem = line.substring(i*valuesOfEachParam.length, (i+1)*valuesOfEachParam.length);
+					
+					int[] oneItemArr = new int[valuesOfEachParam.length];
+					//读取的是失效测试用例
+					if (isGetAllFtcs) {
+						for (int j = 0; j < oneItem.length(); j++) {
+							oneItemArr[j] = Integer.parseInt(oneItem.substring(j, j+1));
+						}
+					} else {
+						for (int j = 0; j < oneItem.length(); j++) {
+							if (!oneItem.substring(j, j+1).equals("-")) {
+								oneItemArr[j] = Integer.parseInt(oneItem.substring(j, j+1));
+							} else {
+								oneItemArr[j] = -1;	//将"-"字符转成-1
+							}
+						}
+					}
+					allFtcsOfMfs.add(oneItemArr);
+				}
 			}
+			line = br.readLine();
 		}
 		br.close();
-		return null;
-	}
-	
-	/**
-	 * 获取所有的MFS
-	 * @param tcasFailtestFileName
-	 * @return
-	 */
-	public List<int[]> getMfs(String tcasFailtestFileNam) {
-		return null;
+		
+		return allFtcsOfMfs;
 	}
 	
 	/**
