@@ -57,7 +57,7 @@ public class DataHelper {
 	 */
 	public List<int[]> getAllFtcsOrMfs(String tcasFailtestOfMfsFileName, boolean isGetAllFtcs) throws IOException {
 		List<int[]> allFtcsOfMfs = new ArrayList<int[]>();
-		int[] valuesOfEachParam = getValuesOfEachParam(tcasFailtestOfMfsFileName.split("_")[0]+".txt");	
+		int[] valuesOfEachParam = getValuesOfEachParam(isGetAllFtcs ? tcasFailtestOfMfsFileName : tcasFailtestOfMfsFileName.split("_")[0]+".txt");	
 		int itemsOfLine = 1;		//考虑一行有多个item的情况
 		
 		File f = new File((isGetAllFtcs ? tcasFailtestPath : tcasMfsPath)+tcasFailtestOfMfsFileName);

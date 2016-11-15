@@ -1,10 +1,7 @@
 package faultlocation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
 
 import common.Util;
 
@@ -34,19 +31,8 @@ public class IterAIFL implements IStrategy {
 			preSuspSet = curSuspSet;
 		}
 		
-		//返回可以的极小故障模式集
+		//返回可疑的极小故障模式集
 		faultSchemas.addAll(curSuspSet.size() == 0 ? preSuspSet : curSuspSet);
 	}	
 	
-	
-	@Test
-	public void genATTest() {
-		List<int[]> ftcs = new ArrayList<int[]>();
-		ftcs.add(new int[] {0, 0, 0, 0, 0});
-		ftcs.add(new int[] {1, 1, 1, 1, 1});
-		List<int[]> at = Util.genAT(ftcs, new int[] {2, 2, 2, 2, 2});
-		for (int[] oneat : at) {
-			System.out.println(Arrays.toString(oneat));
-		}
-	}
 }

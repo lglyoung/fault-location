@@ -1,4 +1,4 @@
-package mytest;
+package test;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -122,6 +122,15 @@ public class CommonUtilsTest {
 		List<int[]> ftcs = dh.getAllFtcsOrMfs("TCAS1ASF1_MFS.txt", false);
 		for (int[] tmpftc : ftcs) {
 			System.out.println(Arrays.toString(tmpftc));
+		}
+	}
+	
+	@Test
+	public void genCtsTest() throws IOException {
+		String path = "D:\\Files\\测试\\BoolExperiment\\CTS\\14_2_4.txt";
+		List<int[]> cts = Util.genCts(path);
+		for (int[] tmptc : cts) {
+			System.out.println(Arrays.toString(tmptc));
 		}
 	}
 }
