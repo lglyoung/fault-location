@@ -13,7 +13,8 @@ public class IterAIFL implements IStrategy {
 		int tcLen = valuesOfEachParam.length;								//测试用例的长度
 		List<int[]> scheSetT1 = Util.genScheSet(ftcs);
 		List<int[]> scheSetT2 = Util.genScheSet(ptcs);
-		List<int[]> preSuspSet = Util.arrDiffSet(scheSetT1, scheSetT2);	//前一次的可疑模式集
+		List<int[]> preSuspSet = Util.arrDiffSet(scheSetT1, scheSetT2);		//前一次的可疑模式集
+		
 		List<int[]> curSuspSet = new ArrayList<int[]>();
 		
 		//目前暂未考虑"达到某个阈值时退出"这种情况
@@ -33,6 +34,9 @@ public class IterAIFL implements IStrategy {
 		
 		//返回可疑的极小故障模式集
 		faultSchemas.addAll(curSuspSet.size() == 0 ? preSuspSet : curSuspSet);
+		
+		//对附加测试用例集进行去重
+		Util.delRepeat(extraTcs);
 	}	
 	
 }

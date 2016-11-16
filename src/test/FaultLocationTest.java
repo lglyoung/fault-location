@@ -2,7 +2,9 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.SynchronousQueue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,22 +25,18 @@ public class FaultLocationTest {
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
 	private Context ctx;
+	private String curBoolExp = "TCAS12LRF85";
 	
 	@Before
 	public void before() throws IOException {
-		List<int[]> cts = new ArrayList<int[]>();	//组合测试工具生成的测试用例集
-		cts.add(new int[] {0,0,0,1,0});
-		cts.add(new int[] {1,0,1,1,0});
-		cts.add(new int[] {1,1,0,1,0});
-		cts.add(new int[] {0,1,1,0,1});
-		cts.add(new int[] {0,1,1,1,1});
-		cts.add(new int[] {1,0,0,0,1});
-		
-		String tcasFailtestPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_FAILTEST\\";
-		String tcasMfsPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_MFS\\";
+		String rootPath = "D:\\Files\\测试\\BoolExperiment\\";
+		String tcasFailtestPath = rootPath + "TCAS_FAILTEST\\";
+		String tcasMfsPath = rootPath + "TCAS_MFS\\";
+		String ctsPath = rootPath + "CTS\\";
 		dh = new DataHelper(tcasFailtestPath, tcasMfsPath);
-		valuesOfEachParam = dh.getValuesOfEachParam("TCAS1ASF1.txt");
-		affFtcs = dh.getAllFtcsOrMfs("TCAS1ASF1.txt", true);
+		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
+		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
+		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_2.txt");
 		ptcs = Util.arrDiffSet(cts, affFtcs);
 		ftcs = Util.arrDiffSet(cts, ptcs);
 		extraTcs = new ArrayList<int[]>();
@@ -56,13 +54,18 @@ public class FaultLocationTest {
 	}
 	
 	@After
-	public void after() {
+	public void after() throws IOException {
 		ctx.faultLocating(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
-
-		//打印故障模式
-		for(int[] tmp : faultSchemas) {
-			System.out.println(Util.intArrayToStr(tmp));
-		}
+		
+		//计算命中率
+		System.out.println("命中率："+
+				Util.hitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
+		
+		//不命中率
+		Util.removeParentSche(faultSchemas);
+		System.out.println("错误率："+
+				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
+		
 	}
 	
 }

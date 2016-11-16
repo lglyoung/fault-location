@@ -20,6 +20,8 @@ import org.junit.Test;
 
 import common.DataHelper;
 import common.Util;
+import faultlocation.IStrategy;
+import faultlocation.IterAIFL;
 
 public class CommonUtilsTest {
 	@Test
@@ -132,5 +134,18 @@ public class CommonUtilsTest {
 		for (int[] tmptc : cts) {
 			System.out.println(Arrays.toString(tmptc));
 		}
+	}
+	
+	@Test
+	public void aHasSubScheBTest() {
+		int[] a = {1, -1, -1, 1};
+		int[] b = {1, 1, -1, 1};
+		System.out.println(Util.aHasSubScheB(b, a));
+	}
+	
+	@Test
+	public void className() {
+		IStrategy ia = new IterAIFL();
+		System.out.println(ia.getClass().getSimpleName());
 	}
 }

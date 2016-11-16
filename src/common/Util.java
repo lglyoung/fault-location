@@ -241,7 +241,10 @@ public class Util {
 		for (int[] allEle : all) {
 			isIn = false;
 			for (int[] asetEle : aset) {
-				if (Arrays.equals(allEle, asetEle)) isIn = true;
+				if (Arrays.equals(allEle, asetEle)) {
+					isIn = true;
+					break;
+				}
 			}
 			if (!isIn) diffSet.add(allEle);
 		}	
@@ -297,6 +300,19 @@ public class Util {
 	}
 	
 	/**
+	 * List<int[]>转Set<String>
+	 * @param intArrList
+	 * @return
+	 */
+	public static Set<String> intArrayListToStrScheSet(List<int[]> intArrList) {
+		Set<String> set = new HashSet<String>();
+		for (int[] tmparr : intArrList) {
+			set.add(intArrayToStr(tmparr));
+		}
+		return set;
+	}
+	
+	/**
 	 * 获取测试用例集的模式集
 	 */
 	public static List<int[]> genScheSet(List<int[]> tcs) {
@@ -304,6 +320,9 @@ public class Util {
 		for (int[] tc : tcs) {
 			scheSet.addAll(genAllSubSchemas(tc));
 		}
+		
+		//去重
+		delRepeat(scheSet);
 		return scheSet;
 	}
 	
@@ -406,12 +425,38 @@ public class Util {
 	}
 	
 	/**
-	 * 去掉一个模式集中某个模式的父模式
+	 * 去掉一个模式集中某个模式的父模式: 判断当前模式有没有子模式，如果有，那么就把这个模式去掉
 	 */
-	public static void removeParentSche() {
+	public static void removeParentSche(List<int[]> schemas) {
+		List<int[]> parentSche = new ArrayList<int[]>();
+		for (int i = 0; i < schemas.size(); i++) {
+			for (int j = i+1; j < schemas.size(); j++) {
+				if (aHasSubScheB(schemas.get(i), schemas.get(j))) {
+					parentSche.add(schemas.get(i));
+				}
+			}
+		}
 		
+		schemas.removeAll(parentSche);
 	}
 	
+	/**
+	 * 判断a是否含有b这个子模式
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static boolean aHasSubScheB(int[] a, int[] b) {
+		for (int i = 0; i < a.length; i++) {
+			if (a[i] != -1) {
+				if (b[i] != -1 && b[i] != a[i]) return false;
+			} else {
+				if (b[i] != -1) return false;
+			}
+		}
+		return a.length > 0 ? true : false;
+	}
+
 	/**
 	 * 根据失效测试用例集生成附加测试用例集，生成规则：迭代的将某一位上的参数值换成另外一个值，从而生成多个附加测试用例
 	 * @param ftcs 失效测试用例集
@@ -479,6 +524,57 @@ public class Util {
 		}
 		br.close();
 		return cts;
+	}
+
+	/**
+	 * 将List<int[]>重复的元素进行过滤
+	 * @param extraTcs
+	 */
+	public static void delRepeat(List<int[]> extraTcs) {
+		Set<String> set = intArrayListToStrScheSet(extraTcs);
+		extraTcs.clear();
+		extraTcs.addAll(strScheSetToIntArrayList(set));
+	}
+	
+	/**
+	 * 计算极小故障模式的命中率
+	 * @param allMfs
+	 * @param hitMfs
+	 * @return
+	 */
+	public static double hitRate(List<int[]> allMfs, List<int[]> hitMfs) {
+		double count = 0;
+		for (int[] tmpmfs : allMfs) {
+			for (int[] tmphit : hitMfs) {
+				if (Arrays.equals(tmpmfs, tmphit)) {
+					count++;
+					break;
+				}
+			}
+		}
+		return count / allMfs.size();
+	}
+	
+	/**
+	 * 计算极小故障模式的非命中率
+	 * @param allMfs
+	 * @param hitMfs
+	 * @return
+	 */
+	public static double notHitRate(List<int[]> allMfs, List<int[]> hitMfs) {
+		int count = 0;
+		boolean isIn = false;
+		for (int[] tmpmfs : hitMfs) {
+			isIn = false;
+			for (int[] tmphit : allMfs) {
+				if (Arrays.equals(tmpmfs, tmphit)) {
+					isIn = true;
+					break;
+				}
+			}
+			if (!isIn) count++;
+		}
+		return count / allMfs.size();
 	}
 }
 
