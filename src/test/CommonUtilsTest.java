@@ -19,8 +19,8 @@ import java.util.TreeSet;
 import org.junit.Test;
 
 import common.DataHelper;
+import common.IStrategy;
 import common.Util;
-import faultlocation.IStrategy;
 import faultlocation.IterAIFL;
 
 public class CommonUtilsTest {

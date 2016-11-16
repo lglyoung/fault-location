@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import common.IStrategy;
 import common.Util;
 import entries.SchemaNode;
 

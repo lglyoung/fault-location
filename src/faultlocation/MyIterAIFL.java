@@ -3,6 +3,7 @@ package faultlocation;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.IStrategy;
 import common.Util;
 
 public class MyIterAIFL implements IStrategy {

@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import deltadebugging.Isolation;
-import deltadebugging.RI;
+import common.Isolation;
 
 public class IsolationTest {
 	@Test
@@ -32,14 +31,4 @@ public class IsolationTest {
 		System.out.println(Isolation.isolate(ftc4, observedParams, valuesOfEachParam, ftcs, null, extraTcs));
 	}
 	
-	@Test
-	public void genChangedParamsTest() {
-		int[] ftc = {1, 0, 1, 0};
-		List<Integer> relatedParams = new ArrayList<Integer>();
-		relatedParams.add(0);
-		relatedParams.add(1);
-		relatedParams.add(2);
-		relatedParams.add(3);
-		System.out.println(RI.genChangedParams(ftc, relatedParams));
-	}
 }

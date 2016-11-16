@@ -2,19 +2,18 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import common.DataHelper;
+import common.IStrategy;
 import common.Util;
-import faultlocation.Context;
 import faultlocation.IterAIFL;
-import faultlocation.SchemaTreeStrategy;
+import faultlocation.Ri;
+import faultlocation.Simplification;
 
 public class FaultLocationTest {
 	private DataHelper dh;
@@ -24,8 +23,8 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private Context ctx;
 	private String curBoolExp = "TCAS12LRF85";
+	private IStrategy strategy;
 	
 	@Before
 	public void before() throws IOException {
@@ -44,18 +43,23 @@ public class FaultLocationTest {
 	}
 	
 	@Test
-	public void SchemaTreeStrategyTest() {
-		ctx = new Context(new SchemaTreeStrategy());
+	public void simplificationTest() {
+		strategy = new Simplification();
 	}
 	
 	@Test
-	public void IterAIFLTest() {
-		ctx = new Context(new IterAIFL());
+	public void riTest() {
+		strategy = new Ri();
+	}
+	
+	@Test
+	public void iterAIFLTest() {
+		strategy = new IterAIFL();
 	}
 	
 	@After
 	public void after() throws IOException {
-		ctx.faultLocating(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+		strategy.faultLocating(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 		
 		//计算命中率
 		System.out.println("命中率："+

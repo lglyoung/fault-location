@@ -1,4 +1,4 @@
-package experiment;
+package expe;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,13 +9,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
 import common.DataHelper;
+import common.IStrategy;
 import common.Util;
-import faultlocation.Context;
-import faultlocation.IStrategy;
-import faultlocation.IterAIFL;
+import faultlocation.Ri;
 
 public class Expe {
 	private String resultPath;		//保存实验结果的路径
@@ -27,7 +24,6 @@ public class Expe {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private Context ctx;
 	
 	public static void main(String[] args) throws IOException {
 		String rootPath = "D:\\Files\\测试\\BoolExperiment\\";
@@ -36,7 +32,7 @@ public class Expe {
 		String ctsPath = rootPath + "CTS\\";
 		Expe expe = new Expe(tcasFailtestPath, tcasMfsPath, ctsPath);
 		expe.resultPath = rootPath + "FL_RESULT\\";
-		expe.doExpe(new IterAIFL());
+		expe.doExpe(new Ri());
 		System.out.println("end!");
 	}
 
@@ -51,8 +47,6 @@ public class Expe {
 	 * @throws IOException 
 	 */
 	public void doExpe(IStrategy strategy) throws IOException {
-		ctx = new Context(strategy);
-		
 		//获取所有的保存失效测试用例集的文件名
 		List<String> fcasFailtestFileNames = dh.getTcasFailtestFileNames();
 
@@ -63,6 +57,7 @@ public class Expe {
 		OutputStream os = new FileOutputStream(resFile);
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, "utf-8"));
 		
+		double hr = 0, sum = 0, count = 0;
 		for (String tmpStr : fcasFailtestFileNames) {
 			//tmpStr = "TCAS12LRF85.txt";
 			valuesOfEachParam = dh.getValuesOfEachParam(tmpStr);
@@ -74,16 +69,24 @@ public class Expe {
 			faultSchemas = new ArrayList<int[]>();
 			
 			//故障定位
-			ctx.faultLocating(valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+			strategy.faultLocating(valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 			
 			//处理实验数据
-			
 			String mfsFileName = tmpStr.substring(0, tmpStr.lastIndexOf("."))+"_MFS.txt";
-			String res = tmpStr+"命中率："+
+			hr = Util.hitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
+			if (hr != 0.0) {
+				count++;
+				sum += hr;
+			}
+			
+			/*String hitres = tmpStr+"命中率："+
 					Util.hitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
-			System.out.println(res);
-			bw.write(res);
+			String nothitres = tmpStr+"非命中率："+
+					Util.notHitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
+			bw.write(hitres+"\n");
+			bw.write(nothitres+"\n");*/		
 		}
+		System.out.println(sum / count);
 		bw.close();
 	}
 }

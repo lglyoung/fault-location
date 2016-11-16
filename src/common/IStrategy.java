@@ -1,4 +1,4 @@
-package faultlocation;
+package common;
 
 import java.util.List;
 

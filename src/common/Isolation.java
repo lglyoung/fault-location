@@ -1,11 +1,9 @@
-package deltadebugging;
+package common;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-
-import common.Util;
 
 public class Isolation {
 	

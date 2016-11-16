@@ -125,7 +125,6 @@ public class Util {
 	}
 	
 	
-	
 	/**
 	 * 根据ftc和unchangedParams来生成形如[1, 2, 1, -1]这样的故障模式，-1就类似于"-"。
 	 * @param ftc 失效测试用例
@@ -146,6 +145,22 @@ public class Util {
 		}
 		return fs;
 	}
+	
+	/**
+	 * 返回与故障无关的参数
+	 * @param ftc 失效测试用例
+	 * @param relatedParams 与故障相关的参数
+	 * @return List<Integer> 
+	 */
+	public static List<Integer> genChangedParams(int[] ftc, List<Integer> relatedParams) {
+		Set<Integer> allParams = new HashSet<Integer>();
+		for(int i = 0; i < ftc.length; i++) {
+			allParams.add(i);
+		}
+		allParams.removeAll(relatedParams);
+		return new ArrayList<Integer>(allParams);
+	}
+
 	
 	/**
 	 * 将int[]转成字符串

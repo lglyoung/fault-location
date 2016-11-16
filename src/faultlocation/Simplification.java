@@ -1,29 +1,25 @@
-package deltadebugging;
+package faultlocation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import common.IStrategy;
 import common.Util;
 
-public class Simplification {
-	/**
-	 * simplification错误定位方法
-	 * @param valuesOfEachParam 如{3, 4, 5}表示第0个参数可以取3个值，第1个参数可以取4个值，第2个参数可以取5个值
-	 * @param ftcs 失效测试用例集
-	 * @param ptcs 通过测试用例集
-	 * @param extraTcs 附加测试用例集(记得去重，又不能用Set<int[]>去重，因为int[]是对象)
-	 * @param faultSchemas 故障模式集
-	 */
-	public static void simplify(int[] valuesOfEachParam, List<int[]> ftcs, 
-			List<int[]> ptcs, List<int[]> extraTcs, List<int[]> faultSchemas) {
+public class Simplification implements IStrategy {
+
+	@Override
+	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
+			List<int[]> extraTcs, List<int[]> faultSchemas) {
 		
+		//初始化关注模式
 		List<Integer> initUnchangeParams = new ArrayList<Integer>();
 		for(int i = 0; i < valuesOfEachParam.length; i++) {
 			initUnchangeParams.add(i);
 		}
 		
-		//遍历所有的失效测试用例
+		//遍历组合测试的所有失效测试用例
 		for(int[] ftc : ftcs) {	
 			List<Integer> unchangedParams = new ArrayList<Integer>(initUnchangeParams);
 			int g = 2;
@@ -39,7 +35,7 @@ public class Simplification {
 					//保存附加测试用例
 					Util.addNotRepeatIntArray(extraTc, extraTcs);
 					
-					isFtc = Util.isFailTc(extraTc, ftcs, ptcs);
+					isFtc = Util.isFailTc(extraTc, allFtcs, null);
 					if(isFtc) {
 						unchangedParams = updateUnchangedParams(unchangedParams, changedParams);
 						g = Math.max(g-1, 2);
@@ -59,7 +55,7 @@ public class Simplification {
 			Util.addNotRepeatIntArray(Util.genFaultSchema(ftc, unchangedParams), faultSchemas);
 		}
 	}
-		
+	
 	/**
 	 * 从unchangedParams中删除changedParams
 	 * @param unchangedParams 未被修改的参数
@@ -72,5 +68,7 @@ public class Simplification {
 		List<Integer> newUnchangedParams = new ArrayList<Integer>(s);
 		return newUnchangedParams;
 	}
+	
+
 	
 }
