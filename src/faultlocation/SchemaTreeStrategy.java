@@ -34,7 +34,7 @@ public class SchemaTreeStrategy implements IStrategy {
 						int[] extraTc = genExtraTc(valuesOfEachParam, ftc, poll.getTestcase());
 						//保存附加测试用例
 						Util.addNotRepeatIntArray(extraTc, extraTcs);
-						boolean isFailTc = Util.isFailTc(extraTc, ftcs, ptcs);
+						boolean isFailTc = Util.isFailTc(extraTc, allFtcs, null);
 						if(isFailTc) {
 							poll.setState(FAIL);
 						} else {

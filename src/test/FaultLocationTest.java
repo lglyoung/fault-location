@@ -13,7 +13,9 @@ import common.IStrategy;
 import common.Util;
 import faultlocation.IterAIFL;
 import faultlocation.Ri;
+import faultlocation.SchemaTreeStrategy;
 import faultlocation.Simplification;
+import faultlocation.Sri;
 
 public class FaultLocationTest {
 	private DataHelper dh;
@@ -52,9 +54,20 @@ public class FaultLocationTest {
 		strategy = new Ri();
 	}
 	
+
+	@Test
+	public void sriTest() {
+		strategy = new Sri();
+	}
+	
 	@Test
 	public void iterAIFLTest() {
 		strategy = new IterAIFL();
+	}
+	
+	@Test
+	public void schemaTreeTest() {
+		strategy = new SchemaTreeStrategy();
 	}
 	
 	@After

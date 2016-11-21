@@ -12,7 +12,7 @@ import java.util.List;
 import common.DataHelper;
 import common.IStrategy;
 import common.Util;
-import faultlocation.Ri;
+import faultlocation.Simplification;
 
 public class Expe {
 	private String resultPath;		//保存实验结果的路径
@@ -32,7 +32,7 @@ public class Expe {
 		String ctsPath = rootPath + "CTS\\";
 		Expe expe = new Expe(tcasFailtestPath, tcasMfsPath, ctsPath);
 		expe.resultPath = rootPath + "FL_RESULT\\";
-		expe.doExpe(new Ri());
+		expe.doExpe(new Simplification());
 		System.out.println("end!");
 	}
 
@@ -57,7 +57,7 @@ public class Expe {
 		OutputStream os = new FileOutputStream(resFile);
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, "utf-8"));
 		
-		double hr = 0, sum = 0, count = 0;
+		double hr = 0, sum = 0, extraTcSum = 0, extraTcSum2 = 0;
 		for (String tmpStr : fcasFailtestFileNames) {
 			//tmpStr = "TCAS12LRF85.txt";
 			valuesOfEachParam = dh.getValuesOfEachParam(tmpStr);
@@ -75,9 +75,10 @@ public class Expe {
 			String mfsFileName = tmpStr.substring(0, tmpStr.lastIndexOf("."))+"_MFS.txt";
 			hr = Util.hitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
 			if (hr != 0.0) {
-				count++;
 				sum += hr;
 			}
+			
+			extraTcSum += extraTcs.size();
 			
 			/*String hitres = tmpStr+"命中率："+
 					Util.hitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
@@ -85,8 +86,11 @@ public class Expe {
 					Util.notHitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
 			bw.write(hitres+"\n");
 			bw.write(nothitres+"\n");*/		
+			System.out.println(tmpStr);
 		}
-		System.out.println(sum / count);
+		System.out.println("平均命中率：" + sum / fcasFailtestFileNames.size());
+		System.out.println("总的附加测试用例数：" + extraTcSum);
+		
 		bw.close();
 	}
 }

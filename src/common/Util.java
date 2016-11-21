@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -543,12 +545,12 @@ public class Util {
 
 	/**
 	 * 将List<int[]>重复的元素进行过滤
-	 * @param extraTcs
+	 * @param intArrList
 	 */
-	public static void delRepeat(List<int[]> extraTcs) {
-		Set<String> set = intArrayListToStrScheSet(extraTcs);
-		extraTcs.clear();
-		extraTcs.addAll(strScheSetToIntArrayList(set));
+	public static void delRepeat(List<int[]> intArrList) {
+		Set<String> set = intArrayListToStrScheSet(intArrList);
+		intArrList.clear();
+		intArrList.addAll(strScheSetToIntArrayList(set));
 	}
 	
 	/**
@@ -590,6 +592,20 @@ public class Util {
 			if (!isIn) count++;
 		}
 		return count / allMfs.size();
+	}
+	
+	/**
+	 * all集合不包含sub的任一元素时，返回true
+	 * @param all
+	 * @param sub
+	 * @return
+	 */
+	public static boolean notContainsAnyOneOf(Collection<?> all, Collection<?> sub) {
+		Iterator<?> i = sub.iterator();
+		while (i.hasNext()) {
+			if (all.contains(i.next())) return false;
+		}
+		return true;
 	}
 }
 

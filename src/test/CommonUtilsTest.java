@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -147,5 +148,16 @@ public class CommonUtilsTest {
 	public void className() {
 		IStrategy ia = new IterAIFL();
 		System.out.println(ia.getClass().getSimpleName());
+	}
+	
+	@Test
+	public void notContainAnyOneOf() {
+		Set<Integer> s = new HashSet<Integer>();
+		List<Integer> l = new ArrayList<Integer>();
+		s.add(1);
+		s.add(3);
+		l.add(4);
+		l.add(2);
+		System.out.println(Util.notContainsAnyOneOf(s, l));
 	}
 }

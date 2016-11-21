@@ -1,7 +1,9 @@
 package common;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -19,10 +21,7 @@ public class Isolation {
 	 */
 	public static int isolate(int[] ftc, List<Integer> observedParams, int[] valuesOfEachParam, List<int[]> ftcs, 
 			List<int[]> ptcs, List<int[]> extraTcs) {
-		if((observedParams == null) || (observedParams.size() == 0)) {
-			return -1;
-		}
-		
+		Set<String> extraTcsStrSet = new HashSet<String>();	//用Set<String>去重附加测试用例集
 		List<Integer> unrelatedParams = new ArrayList<Integer>();
 		
 		while(observedParams.size() != 1) {
@@ -35,7 +34,7 @@ public class Isolation {
 			int[] extraTc = Util.genExtraTc(valuesOfEachParam, ftc, changedParams);
 			
 			//保存附加测试用例
-			Util.addNotRepeatIntArray(extraTc, extraTcs);
+			extraTcsStrSet.add(Util.intArrayToStr(extraTc));
 			
 			if(Util.isFailTc(extraTc, ftcs, ptcs)) {
 				observedParams = groups.get(1);
@@ -44,6 +43,7 @@ public class Isolation {
 				observedParams = groups.get(0);
 			}
 		}
+		extraTcs.addAll(Util.strScheSetToIntArrayList(extraTcsStrSet));
 		return observedParams.get(0);
 	}
 	
