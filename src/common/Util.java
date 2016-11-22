@@ -24,11 +24,11 @@ public class Util {
 	 * @return 参数组，如{{1, 2}, {3, 4}}
 	 */
 	public static List<List<Integer>> paramGroups(List<Integer> params, int g) {
-		if(params.size() < g) {
-			return null;				//如果params的长度小于g，则返回null
-		}
-		
 		List<List<Integer>> groups = new ArrayList<List<Integer>>();
+		if(params.size() < g) {
+			groups.add(params);
+			return groups;				//如果params的长度小于g，则返回null
+		}
 		
 		int[] subLens = new int[g];
 		int quotient = params.size() / g;
@@ -579,7 +579,7 @@ public class Util {
 	 * @return
 	 */
 	public static double notHitRate(List<int[]> allMfs, List<int[]> hitMfs) {
-		int count = 0;
+		double count = 0;
 		boolean isIn = false;
 		for (int[] tmpmfs : hitMfs) {
 			isIn = false;
@@ -606,6 +606,26 @@ public class Util {
 			if (all.contains(i.next())) return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 获取候选参数集
+	 * @param k
+	 * @param cfree
+	 * @param interaction
+	 * @return
+	 */
+	public static List<Integer> getCcand(int k, List<Integer> cfree, List<Integer> interaction) {
+		//所有参数集
+		Set<Integer> allParams = new HashSet<Integer>();
+		for (int i = 0; i < k; i++) {
+			allParams.add(i);
+		}
+		
+		//返回差集
+		allParams.removeAll(cfree);
+		allParams.removeAll(interaction);
+		return new ArrayList<Integer>(allParams);	
 	}
 }
 

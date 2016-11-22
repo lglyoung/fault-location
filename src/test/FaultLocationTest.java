@@ -8,9 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import common.BSLocateFixedParam;
 import common.DataHelper;
 import common.IStrategy;
 import common.Util;
+import faultlocation.Finovlp;
 import faultlocation.IterAIFL;
 import faultlocation.Ri;
 import faultlocation.SchemaTreeStrategy;
@@ -42,6 +44,8 @@ public class FaultLocationTest {
 		ftcs = Util.arrDiffSet(cts, ptcs);
 		extraTcs = new ArrayList<int[]>();
 		faultSchemas = new ArrayList<int[]>();
+		
+		System.out.println("失效测试用例集的个数："+ftcs.size());
 	}
 	
 	@Test
@@ -70,6 +74,11 @@ public class FaultLocationTest {
 		strategy = new SchemaTreeStrategy();
 	}
 	
+	@Test
+	public void finovlpTest() {
+		strategy = new Finovlp(new BSLocateFixedParam());
+	}
+	
 	@After
 	public void after() throws IOException {
 		strategy.faultLocating(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
@@ -81,8 +90,10 @@ public class FaultLocationTest {
 		//不命中率
 		Util.removeParentSche(faultSchemas);
 		System.out.println("错误率："+
-				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
+				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));		
 		
+		//附加测试用例数
+		System.out.println("附加测试用例数：" + extraTcs.size());		
 	}
 	
 }

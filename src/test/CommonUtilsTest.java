@@ -160,4 +160,19 @@ public class CommonUtilsTest {
 		l.add(2);
 		System.out.println(Util.notContainsAnyOneOf(s, l));
 	}
+	
+	@Test
+	public void test() {
+		List<Integer> params = new ArrayList<Integer>();
+		params.add(1);
+		params.add(2);
+		params.add(3);
+		params.add(4);
+		params.add(5);
+		params.add(6);
+		List<List<Integer>> groups = Util.paramGroups(params, 2);
+		for (List<Integer> tmpg : groups) {
+			System.out.println(tmpg);
+		}
+	}
 }
