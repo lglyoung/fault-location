@@ -12,13 +12,15 @@ import org.junit.Test;
 import common.BSLocateFixedParam;
 import common.DataHelper;
 import common.ILocateFault;
+import common.Ri;
+import common.Simplification;
+import common.Sri;
 import common.Util;
+import locatefault.DeltaDebug;
+import locatefault.DeltaDebugMul;
 import locatefault.Fic;
 import locatefault.IterAIFL;
-import locatefault.Ri;
 import locatefault.SchemaTreeStrategy;
-import locatefault.Simplification;
-import locatefault.Sri;
 
 public class FaultLocationTest {
 	private DataHelper dh;
@@ -51,18 +53,18 @@ public class FaultLocationTest {
 	
 	@Test
 	public void simplificationTest() {
-		strategy = new Simplification();
+		strategy = new DeltaDebugMul(new Simplification());
 	}
 	
 	@Test
 	public void riTest() {
-		strategy = new Ri();
+		strategy = new DeltaDebug(new Ri());
 	}
 	
 
 	@Test
 	public void sriTest() {
-		strategy = new Sri();
+		strategy = new DeltaDebug(new Sri());
 	}
 	
 	@Test

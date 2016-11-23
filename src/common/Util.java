@@ -91,13 +91,13 @@ public class Util {
 	/**
 	 * 根据"失效测试用例集"或者"通过测试用例集"来判断附加测试用例是否是失效测试用例
 	 * @param extraTc 附加测试用例
-	 * @param ftcs 失效测试用例集
+	 * @param allFtcs 所有失效测试用例集
 	 * @param ptcs 通过测试用例集
 	 * @return 如果返回true，则tc是失效测试用例； 否则tc不是失效测试用例 
 	 */
-	public static boolean isFailTc(int[] extraTc, List<int[]> ftcs, List<int[]> ptcs) {
-		if(ftcs != null) {
-			for(int[] ftc : ftcs) {
+	public static boolean isFailTc(int[] extraTc, List<int[]> allFtcs, List<int[]> ptcs) {
+		if(allFtcs != null) {
+			for(int[] ftc : allFtcs) {
 				if(Arrays.equals(extraTc, ftc)) {
 					return true;
 				}
@@ -613,14 +613,13 @@ public class Util {
 	 * @param ftc 
 	 * @param observedParams 关注模式
 	 * @param valuesOfEachParam 如{3, 4, 5}表示第0个参数可以取3个值，第1个参数可以取4个值，第2个参数可以取5个值
-	 * @param ftcs 失效测试用例集
+	 * @param allFtcs 所有失效测试用例集
 	 * @param ptcs 通过测试用例集
-	 * @param extraTcs 附加测试用例集(记得去重，又不能用Set<int[]>去重，因为int[]是对象)
+	 * @param extraTcs 附加测试用例集
 	 * @return int 与故障相关的参数所在的索引位置
 	 */
-	public static int isolate(int[] ftc, List<Integer> observedParams, int[] valuesOfEachParam, List<int[]> ftcs, 
+	public static int isolate(int[] ftc, List<Integer> observedParams, int[] valuesOfEachParam, List<int[]> allFtcs, 
 			List<int[]> ptcs, List<int[]> extraTcs) {
-		Set<String> extraTcsStrSet = new HashSet<String>();	//用Set<String>去重附加测试用例集
 		List<Integer> unrelatedParams = new ArrayList<Integer>();
 		
 		while(observedParams.size() != 1) {
@@ -633,16 +632,15 @@ public class Util {
 			int[] extraTc = Util.genExtraTc(valuesOfEachParam, ftc, changedParams);
 			
 			//保存附加测试用例
-			extraTcsStrSet.add(Util.intArrayToStr(extraTc));
+			extraTcs.add(extraTc);
 			
-			if(Util.isFailTc(extraTc, ftcs, ptcs)) {
+			if(Util.isFailTc(extraTc, allFtcs, ptcs)) {
 				observedParams = groups.get(1);
 				unrelatedParams.addAll(groups.get(0));
 			} else {
 				observedParams = groups.get(0);
 			}
 		}
-		extraTcs.addAll(Util.strScheSetToIntArrayList(extraTcsStrSet));
 		return observedParams.get(0);
 	}
 	

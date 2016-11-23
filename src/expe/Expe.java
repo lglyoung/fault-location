@@ -11,8 +11,9 @@ import java.util.List;
 
 import common.DataHelper;
 import common.ILocateFault;
+import common.Ri;
 import common.Util;
-import locatefault.Ri;
+import locatefault.DeltaDebug;
 
 public class Expe {
 	private String resultPath;		//保存实验结果的路径
@@ -32,11 +33,10 @@ public class Expe {
 		String ctsPath = rootPath + "CTS\\";
 		Expe expe = new Expe(tcasFailtestPath, tcasMfsPath, ctsPath);
 		expe.resultPath = rootPath + "FL_RESULT\\";
-		expe.doExpe(new Ri());
+		expe.doExpe(new DeltaDebug(new Ri()));
 		System.out.println("end!");
 	}
 
-	
 	public Expe(String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
 		this.ctsPath = ctsPath;
 		dh = new DataHelper(tcasFailtestPath, tcasMfsPath);
@@ -78,7 +78,9 @@ public class Expe {
 				sum += hr;
 			}
 			
-			extraTcSum += extraTcs.size();			
+			extraTcSum += extraTcs.size();	
+			
+			System.out.println(tmpStr);
 		}
 		System.out.println("平均命中率：" + sum / fcasFailtestFileNames.size());
 		System.out.println("总的附加测试用例数：" + extraTcSum);

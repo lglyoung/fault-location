@@ -34,10 +34,7 @@ public class IterAIFL implements ILocateFault {
 		}
 		
 		//返回可疑的极小故障模式集
-		faultSchemas.addAll(curSuspSet.size() == 0 ? preSuspSet : curSuspSet);
-		
-		//对附加测试用例集进行去重
-		Util.delRepeat(extraTcs);
+		faultSchemas.addAll(curSuspSet.size() == 0 ? preSuspSet : curSuspSet);		
 	}	
 	
 }

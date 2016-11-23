@@ -7,6 +7,11 @@ import common.ILocateFault;
 import common.ILocateFixedParam;
 import common.Util;
 
+/**
+ * FIC定位多个非重叠的故障 模式
+ * @author lglyoung
+ *
+ */
 public class Finovlp implements ILocateFault {
 	private ILocateFixedParam lfp;
 	
@@ -33,9 +38,5 @@ public class Finovlp implements ILocateFault {
 				if (interaction.size() == 0) break; 
 			}
 		}
-		
-		//对extraTcs, faultSchemas进行去重
-		Util.delRepeat(extraTcs);
-		Util.delRepeat(faultSchemas);
 	}
 }

@@ -7,6 +7,11 @@ import common.ILocateFault;
 import common.ILocateFixedParam;
 import common.Util;
 
+/**
+ * FIC定位单个故障模式
+ * @author lglyoung
+ *
+ */
 public class Fic implements ILocateFault {
 	private ILocateFixedParam lfp;
 	
@@ -22,9 +27,5 @@ public class Fic implements ILocateFault {
 					new ArrayList<Integer>(), allFtcs, extraTcs, lfp);
 			faultSchemas.add(Util.genFaultSchema(ftcs.get(i), interaction));
 		}
-		
-		//对extraTcs, faultSchemas进行去重
-		Util.delRepeat(extraTcs);
-		Util.delRepeat(faultSchemas);
 	}
 }
