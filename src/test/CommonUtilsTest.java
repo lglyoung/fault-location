@@ -121,7 +121,7 @@ public class CommonUtilsTest {
 	public void dataHelperTest() throws IOException {
 		String tcasFailtestPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_FAILTEST\\";
 		String tcasMfsPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_MFS\\";
-		DataHelper dh = new DataHelper(tcasFailtestPath, tcasMfsPath);
+		DataHelper dh = new DataHelper(tcasFailtestPath, tcasMfsPath, "");
 		List<int[]> ftcs = dh.getAllFtcsOrMfs("TCAS1ASF1_MFS.txt", false);
 		for (int[] tmpftc : ftcs) {
 			System.out.println(Arrays.toString(tmpftc));

@@ -41,7 +41,7 @@ public class FaultLocationTest {
 		String tcasFailtestPath = rootPath + "TCAS_FAILTEST\\";
 		String tcasMfsPath = rootPath + "TCAS_MFS\\";
 		String ctsPath = rootPath + "CTS\\";
-		dh = new DataHelper(tcasFailtestPath, tcasMfsPath);
+		dh = new DataHelper(tcasFailtestPath, tcasMfsPath, ctsPath);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
 		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_2.txt");

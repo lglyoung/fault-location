@@ -26,27 +26,27 @@ public class LocateFaultFactory {
 	 */
 	public static ILocateFault getProxyInstance(String lfName) {
 		ILocateFault lf = null;
-		if (lfName.equals(Configure.ITERAIFL)) {
+		if (lfName.toUpperCase().equals(Configure.ITERAIFL)) {
 			lf = new IterAIFL();
-		} else if (lfName.equals(Configure.FIC)) {
+		} else if (lfName.toUpperCase().equals(Configure.FIC)) {
 			lf = new Fic(new LocateFixedParam());
-		} else if (lfName.equals(Configure.FIC_BS)) {
+		} else if (lfName.toUpperCase().equals(Configure.FIC_BS)) {
 			lf = new Fic(new BSLocateFixedParam());
-		} else if (lfName.equals(Configure.FINOVLP)) {
+		} else if (lfName.toUpperCase().equals(Configure.FINOVLP)) {
 			lf = new Finovlp(new LocateFixedParam());
-		} else if (lfName.equals(Configure.FINOVLP_BS)) {
+		} else if (lfName.toUpperCase().equals(Configure.FINOVLP_BS)) {
 			lf = new Finovlp(new BSLocateFixedParam());
-		} else if (lfName.equals(Configure.SIMPLIFICATION)) {
+		} else if (lfName.toUpperCase().equals(Configure.SIMPLIFICATION)) {
 			lf = new DeltaDebug(new Simplification());
-		} else if (lfName.equals(Configure.RI)) {
+		} else if (lfName.toUpperCase().equals(Configure.RI)) {
 			lf = new DeltaDebug(new Ri());
-		} else if (lfName.equals(Configure.SRI)) {
+		} else if (lfName.toUpperCase().equals(Configure.SRI)) {
 			lf = new DeltaDebug(new Sri());
-		} else if (lfName.equals(Configure.SIMPLIFICATION_MUL)) {
+		} else if (lfName.toUpperCase().equals(Configure.SIMPLIFICATION_MUL)) {
 			lf = new DeltaDebugMul(new Simplification());
-		} else if (lfName.equals(Configure.RI_MUL)) {
+		} else if (lfName.toUpperCase().equals(Configure.RI_MUL)) {
 			lf = new DeltaDebugMul(new Ri());
-		} else if (lfName.equals(Configure.SRI_MUL)) {
+		} else if (lfName.toUpperCase().equals(Configure.SRI_MUL)) {
 			lf = new DeltaDebugMul(new Sri());
 		}
 		return new LocateFaultProxy(lf);

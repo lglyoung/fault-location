@@ -11,6 +11,7 @@ import java.util.List;
 public class DataHelper {
 	private String tcasFailtestPath;	//保存布尔表达式的失效测试用例集的文件夹
 	private String tcasMfsPath;			//保存布尔表达式的MFS的文件夹
+	private String ctsPath;
 	private List<String> tcasFailtestFileNames = new ArrayList<String>();	//tcasFailtestPath文件夹下的所有文件名
 	
 	/**
@@ -19,9 +20,10 @@ public class DataHelper {
 	 * @param tcasMfsPath
 	 * @throws IOException
 	 */
-	public DataHelper(String tcasFailtestPath, String tcasMfsPath) throws IOException {
+	public DataHelper(String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
 		this.tcasFailtestPath = tcasFailtestPath;
 		this.tcasMfsPath = tcasMfsPath;
+		this.ctsPath = ctsPath;
 		FileInputStream fi = new FileInputStream(tcasFailtestPath+"AllListFile.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(fi, "utf-8"));
 		String line = br.readLine();
@@ -46,6 +48,10 @@ public class DataHelper {
 	 */
 	public String getTcasMfsPath() {
 		return tcasMfsPath;
+	}
+	
+	public String getCtsPath() {
+		return ctsPath;
 	}
 
 	/**
