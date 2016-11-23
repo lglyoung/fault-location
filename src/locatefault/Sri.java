@@ -1,18 +1,17 @@
-package faultlocation;
+package locatefault;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import common.IStrategy;
-import common.Isolation;
+import common.ILocateFault;
 import common.Util;
 
-public class Sri implements IStrategy {
+public class Sri implements ILocateFault {
 
 	@Override
-	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
 			List<int[]> extraTcs, List<int[]> faultSchemas) {
 		
 		Set<String> extraTcsStrSet = new HashSet<String>();	//用Set+String去重附加测试用例集
@@ -31,7 +30,7 @@ public class Sri implements IStrategy {
 				int[] extraTc = null;
 				do{
 					List<Integer> observedParams = genObservedParams(valuesOfEachParam, ftc, relatedParams, ptcs);
-					int relatedParam = Isolation.isolate(ftc, observedParams, valuesOfEachParam, ftcs, ptcs, extraTcs);
+					int relatedParam = Util.isolate(ftc, observedParams, valuesOfEachParam, ftcs, ptcs, extraTcs);
 					relatedParams.add(relatedParam);
 					List<Integer> changedParams = Util.genChangedParams(ftc, relatedParams);
 					extraTc = Util.genExtraTc(valuesOfEachParam, ftc, changedParams);

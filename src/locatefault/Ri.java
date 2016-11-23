@@ -1,18 +1,17 @@
-package faultlocation;
+package locatefault;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import common.IStrategy;
-import common.Isolation;
+import common.ILocateFault;
 import common.Util;
 
-public class Ri implements IStrategy {
+public class Ri implements ILocateFault {
 
 	@Override
-	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
 			List<int[]> extraTcs, List<int[]> faultSchemas) {
 		List<Integer> params = new ArrayList<Integer>();
 		for(int i = 0; i < valuesOfEachParam.length; i++) {
@@ -31,7 +30,7 @@ public class Ri implements IStrategy {
 				List<Integer> relatedParams = new ArrayList<Integer>();
 				int[] extraTc = null;
 				do{
-					int relatedParam = Isolation.isolate(ftc, observedParams, 
+					int relatedParam = Util.isolate(ftc, observedParams, 
 							valuesOfEachParam, ftcs, ptcs, extraTcs);
 					relatedParams.add(relatedParam);
 					List<Integer> changedParams = Util.genChangedParams(ftc, relatedParams);

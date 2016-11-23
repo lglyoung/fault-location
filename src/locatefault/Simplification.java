@@ -1,17 +1,17 @@
-package faultlocation;
+package locatefault;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
 
-public class Simplification implements IStrategy {
+public class Simplification implements ILocateFault {
 
 	@Override
-	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
 			List<int[]> extraTcs, List<int[]> faultSchemas) {
 		
 		//初始化关注模式

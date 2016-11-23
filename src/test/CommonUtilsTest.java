@@ -20,9 +20,9 @@ import java.util.TreeSet;
 import org.junit.Test;
 
 import common.DataHelper;
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
-import faultlocation.IterAIFL;
+import locatefault.IterAIFL;
 
 public class CommonUtilsTest {
 	@Test
@@ -146,7 +146,7 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void className() {
-		IStrategy ia = new IterAIFL();
+		ILocateFault ia = new IterAIFL();
 		System.out.println(ia.getClass().getSimpleName());
 	}
 	

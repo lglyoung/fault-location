@@ -1,4 +1,4 @@
-package faultlocation;
+package locatefault;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -9,17 +9,17 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
 import entries.SchemaNode;
 
-public class SchemaTreeStrategy implements IStrategy {
+public class SchemaTreeStrategy implements ILocateFault {
 	public static final String PASS = "pass";
 	public static final String FAIL = "fail";
 	public static final String UNKNOW = "unknow";
 
 	@Override
-	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
 			List<int[]> faultSchemas) {
 		for(int[] ftc : ftcs) {
 			SchemaNode head = createSchemaTree(ftc);

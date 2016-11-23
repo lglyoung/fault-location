@@ -1,15 +1,15 @@
-package faultlocation;
+package locatefault;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
 
-public class IterAIFL implements IStrategy {
+public class IterAIFL implements ILocateFault {
 
 	@Override
-	public void faultLocating(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
 			List<int[]> faultSchemas) {
 		int tcLen = valuesOfEachParam.length;								//测试用例的长度
 		List<int[]> scheSetT1 = Util.genScheSet(ftcs);

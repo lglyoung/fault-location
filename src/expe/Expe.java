@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.DataHelper;
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
-import faultlocation.Ri;
+import locatefault.Ri;
 
 public class Expe {
 	private String resultPath;		//保存实验结果的路径
@@ -46,7 +46,7 @@ public class Expe {
 	 * 做实验
 	 * @throws IOException 
 	 */
-	public void doExpe(IStrategy strategy) throws IOException {
+	public void doExpe(ILocateFault strategy) throws IOException {
 		//获取所有的保存失效测试用例集的文件名
 		List<String> fcasFailtestFileNames = dh.getTcasFailtestFileNames();
 
@@ -69,7 +69,7 @@ public class Expe {
 			faultSchemas = new ArrayList<int[]>();
 			
 			//故障定位
-			strategy.faultLocating(valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+			strategy.locateFault(valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 			
 			//处理实验数据
 			String mfsFileName = tmpStr.substring(0, tmpStr.lastIndexOf("."))+"_MFS.txt";

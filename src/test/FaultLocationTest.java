@@ -2,6 +2,7 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -10,14 +11,14 @@ import org.junit.Test;
 
 import common.BSLocateFixedParam;
 import common.DataHelper;
-import common.IStrategy;
+import common.ILocateFault;
 import common.Util;
-import faultlocation.Finovlp;
-import faultlocation.IterAIFL;
-import faultlocation.Ri;
-import faultlocation.SchemaTreeStrategy;
-import faultlocation.Simplification;
-import faultlocation.Sri;
+import locatefault.Fic;
+import locatefault.IterAIFL;
+import locatefault.Ri;
+import locatefault.SchemaTreeStrategy;
+import locatefault.Simplification;
+import locatefault.Sri;
 
 public class FaultLocationTest {
 	private DataHelper dh;
@@ -28,7 +29,7 @@ public class FaultLocationTest {
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
 	private String curBoolExp = "TCAS12LRF85";
-	private IStrategy strategy;
+	private ILocateFault strategy;
 	
 	@Before
 	public void before() throws IOException {
@@ -76,12 +77,12 @@ public class FaultLocationTest {
 	
 	@Test
 	public void finovlpTest() {
-		strategy = new Finovlp(new BSLocateFixedParam());
+		strategy = new Fic(new BSLocateFixedParam());
 	}
 	
 	@After
 	public void after() throws IOException {
-		strategy.faultLocating(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+		strategy.locateFault(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 		
 		//计算命中率
 		System.out.println("命中率："+
@@ -93,7 +94,12 @@ public class FaultLocationTest {
 				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));		
 		
 		//附加测试用例数
-		System.out.println("附加测试用例数：" + extraTcs.size());		
-	}
+		System.out.println("附加测试用例数：" + extraTcs.size());	
+		
+		//故障模式
+		for (int[] tmpsche : faultSchemas) {
+			System.out.println(Arrays.toString(tmpsche));
+		}
+	}	
 	
 }

@@ -3,7 +3,7 @@ package entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import faultlocation.SchemaTreeStrategy;
+import locatefault.SchemaTreeStrategy;
 
 public class SchemaNode {
 	private int[] testcase;

@@ -609,6 +609,66 @@ public class Util {
 	}
 	
 	/**
+	 * 获取一个与故障相关的参数所在的索引位置
+	 * @param ftc 
+	 * @param observedParams 关注模式
+	 * @param valuesOfEachParam 如{3, 4, 5}表示第0个参数可以取3个值，第1个参数可以取4个值，第2个参数可以取5个值
+	 * @param ftcs 失效测试用例集
+	 * @param ptcs 通过测试用例集
+	 * @param extraTcs 附加测试用例集(记得去重，又不能用Set<int[]>去重，因为int[]是对象)
+	 * @return int 与故障相关的参数所在的索引位置
+	 */
+	public static int isolate(int[] ftc, List<Integer> observedParams, int[] valuesOfEachParam, List<int[]> ftcs, 
+			List<int[]> ptcs, List<int[]> extraTcs) {
+		Set<String> extraTcsStrSet = new HashSet<String>();	//用Set<String>去重附加测试用例集
+		List<Integer> unrelatedParams = new ArrayList<Integer>();
+		
+		while(observedParams.size() != 1) {
+			List<List<Integer>> groups = Util.paramGroups(observedParams, 2);
+			
+			//changedParams目的是用来生成附加测试 用例
+			List<Integer> changedParams = new ArrayList<Integer>(unrelatedParams); 
+			changedParams.addAll(groups.get(0));
+			
+			int[] extraTc = Util.genExtraTc(valuesOfEachParam, ftc, changedParams);
+			
+			//保存附加测试用例
+			extraTcsStrSet.add(Util.intArrayToStr(extraTc));
+			
+			if(Util.isFailTc(extraTc, ftcs, ptcs)) {
+				observedParams = groups.get(1);
+				unrelatedParams.addAll(groups.get(0));
+			} else {
+				observedParams = groups.get(0);
+			}
+		}
+		extraTcs.addAll(Util.strScheSetToIntArrayList(extraTcsStrSet));
+		return observedParams.get(0);
+	}
+	
+	/**
+	 * FIC故障定位算法
+	 * @param vs 种子测试用例（即已知的失效测试用例）
+	 * @param s 每个元素与对应的参数的值的个数一一对应
+	 * @param k 表示参数的个数
+	 * @param ctabu FIC定位出来的新的故障模式的非固定参数的集合
+	 * @param lfp 接口：定位故障模式的一个固定参数
+	 * @return List<Integer> 故障模式的固定参数集合
+	 */
+	public static List<Integer> fic(int[] vs, int[] s, int k, List<Integer> ctabu, 
+			List<int[]> allFtcs, List<int[]> extraTcs, ILocateFixedParam lfp) {
+		List<Integer> interaction = new ArrayList<Integer>();
+		List<Integer> Cfree = new ArrayList<Integer>(ctabu);
+		int param = -1;		//故障模式的一个固定参数
+		while (true) {
+			param = lfp.locateFixedParam(vs, s, k, Cfree, interaction, allFtcs, extraTcs);
+			if (param == -1) break;
+			interaction.add(param);
+		}
+		return interaction;
+	}
+	
+	/**
 	 * 获取候选参数集
 	 * @param k
 	 * @param cfree

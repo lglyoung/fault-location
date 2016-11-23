@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import common.Isolation;
+import common.Util;
 
 public class IsolationTest {
 	@Test
@@ -28,7 +28,7 @@ public class IsolationTest {
 			observedParams.add(i);
 		}
 
-		System.out.println(Isolation.isolate(ftc4, observedParams, valuesOfEachParam, ftcs, null, extraTcs));
+		System.out.println(Util.isolate(ftc4, observedParams, valuesOfEachParam, ftcs, null, extraTcs));
 	}
 	
 }
