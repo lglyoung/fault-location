@@ -1,0 +1,30 @@
+package locatefault;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import common.ILocateFault;
+import common.ILocateFixedParam;
+import common.Util;
+
+public class Fic implements ILocateFault {
+	private ILocateFixedParam lfp;
+	
+	public Fic(ILocateFixedParam lfp) {
+		this.lfp = lfp;
+	}
+
+	@Override
+	public void locateFault(int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs,
+			List<int[]> extraTcs, List<int[]> faultSchemas) {
+		for (int i = 0; i < ftcs.size(); i++) {
+			List<Integer> interaction = Util.fic(ftcs.get(i), valuesOfEachParam, valuesOfEachParam.length, 
+					new ArrayList<Integer>(), allFtcs, extraTcs, lfp);
+			faultSchemas.add(Util.genFaultSchema(ftcs.get(i), interaction));
+		}
+		
+		//对extraTcs, faultSchemas进行去重
+		Util.delRepeat(extraTcs);
+		Util.delRepeat(faultSchemas);
+	}
+}
