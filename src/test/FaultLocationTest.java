@@ -10,12 +10,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import common.BSLocateFixedParam;
+import common.Configure;
 import common.DataHelper;
 import common.ILocateFault;
 import common.Ri;
 import common.Simplification;
 import common.Sri;
 import common.Util;
+import expe.LocateFaultFactory;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
@@ -80,6 +82,11 @@ public class FaultLocationTest {
 	@Test
 	public void finovlpTest() {
 		strategy = new Fic(new BSLocateFixedParam());
+	}
+	
+	@Test
+	public void factoryTest() {
+		strategy = LocateFaultFactory.getProxyInstance(Configure.SRI_MUL);
 	}
 	
 	@After
