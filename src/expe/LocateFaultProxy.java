@@ -2,7 +2,7 @@ package expe;
 
 import java.util.List;
 
-import common.ILocateFault;
+import base.ILocateFault;
 import common.Util;
 
 /**

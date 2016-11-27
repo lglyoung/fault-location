@@ -1,17 +1,20 @@
 package expe;
 
-import common.BSLocateFixedParam;
+import base.BSLocateFixedParam;
+import base.DFSSelectUnknowNode;
+import base.ILocateFault;
+import base.LPSelectUnknowNode;
+import base.LocateFixedParam;
+import base.Ri;
+import base.Simplification;
+import base.Sri;
 import common.Configure;
-import common.ILocateFault;
-import common.LocateFixedParam;
-import common.Ri;
-import common.Simplification;
-import common.Sri;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
 import locatefault.Finovlp;
 import locatefault.IterAIFL;
+import locatefault.Trt;
 
 /**
  * 故障定位方法的工厂类
@@ -48,6 +51,10 @@ public class LocateFaultFactory {
 			lf = new DeltaDebugMul(new Ri());
 		} else if (lfName.toUpperCase().equals(Configure.SRI_MUL)) {
 			lf = new DeltaDebugMul(new Sri());
+		} else if (lfName.toUpperCase().equals(Configure.DFSTRT)) {
+			lf = new Trt(new DFSSelectUnknowNode());
+		} else if (lfName.toUpperCase().equals(Configure.LPTRT)) {
+			lf = new Trt(new LPSelectUnknowNode());
 		}
 		return new LocateFaultProxy(lf);
 	}

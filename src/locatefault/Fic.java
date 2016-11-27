@@ -3,8 +3,8 @@ package locatefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import common.ILocateFault;
-import common.ILocateFixedParam;
+import base.ILocateFault;
+import base.ILocateFixedParam;
 import common.Util;
 
 /**

@@ -9,20 +9,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import common.BSLocateFixedParam;
+import base.BSLocateFixedParam;
+import base.DFSSelectUnknowNode;
+import base.ILocateFault;
+import base.Ri;
+import base.Simplification;
+import base.Sri;
 import common.Configure;
 import common.DataHelper;
-import common.ILocateFault;
-import common.Ri;
-import common.Simplification;
-import common.Sri;
 import common.Util;
 import expe.LocateFaultFactory;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
 import locatefault.IterAIFL;
-import locatefault.SchemaTreeStrategy;
+import locatefault.Trt;
 
 public class FaultLocationTest {
 	private DataHelper dh;
@@ -32,7 +33,7 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private String curBoolExp = "TCAS12LRF85";
+	private String curBoolExp = "TCAS12LRF85"; 		//"TCAS12LRF85";
 	private ILocateFault strategy;
 	
 	@Before
@@ -40,7 +41,7 @@ public class FaultLocationTest {
 		String rootPath = "D:\\Files\\测试\\BoolExperiment\\";
 		String tcasFailtestPath = rootPath + "TCAS_FAILTEST\\";
 		String tcasMfsPath = rootPath + "TCAS_MFS\\";
-		String ctsPath = rootPath + "CTS\\";
+		String ctsPath = rootPath + "CTS\\Tconfig\\";
 		dh = new DataHelper(tcasFailtestPath, tcasMfsPath, ctsPath);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
@@ -76,7 +77,7 @@ public class FaultLocationTest {
 	
 	@Test
 	public void schemaTreeTest() {
-		strategy = new SchemaTreeStrategy();
+		strategy = new Trt(new DFSSelectUnknowNode());
 	}
 	
 	@Test
@@ -105,9 +106,9 @@ public class FaultLocationTest {
 		//附加测试用例数
 		System.out.println("附加测试用例数：" + extraTcs.size());	
 		
-		//故障模式
-		for (int[] tmpsche : faultSchemas) {
-			System.out.println(Arrays.toString(tmpsche));
+		System.out.println("MFS：");
+		for (int[] mfs : faultSchemas) {
+			System.out.println(Arrays.toString(mfs));
 		}
 	}	
 	

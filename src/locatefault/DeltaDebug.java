@@ -2,8 +2,8 @@ package locatefault;
 
 import java.util.List;
 
-import common.IDeltaDebug;
-import common.ILocateFault;
+import base.IDeltaDebug;
+import base.ILocateFault;
 import common.Util;
 
 /**

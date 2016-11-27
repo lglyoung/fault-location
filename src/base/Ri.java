@@ -1,7 +1,9 @@
-package common;
+package base;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import common.Util;
 
 /**
  * ri差异定位算法

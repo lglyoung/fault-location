@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
+import base.ILocateFixedParam;
+import entries.SchemaNode;
 
 public class Util {
 	/**
@@ -684,6 +689,35 @@ public class Util {
 		allParams.removeAll(cfree);
 		allParams.removeAll(interaction);
 		return new ArrayList<Integer>(allParams);	
+	}
+	
+	/**
+	 * 遍历关系树模型
+	 */
+	public static void dfsTrt(SchemaNode head) {
+		Deque<SchemaNode> stack = new ArrayDeque<SchemaNode>();	//栈
+		stack.push(head);
+		SchemaNode popNode = null;			//指向弹出的节点
+		List<SchemaNode> tmpNodes = null;
+		Map<SchemaNode, SchemaNode> map = new HashMap<SchemaNode, SchemaNode>();	//保存已经生成的节点，目的是去重，用Map而不用Set的目的是方便取到已经存在的节点	
+
+		int count = 0;
+		while (!stack.isEmpty()) {
+			//弹栈
+			popNode = stack.pop();
+			map.put(popNode, popNode);
+			//System.out.println(popNode);
+			count++;
+			
+			//将直接子节点压栈
+			tmpNodes = popNode.getDirectChildren();
+			for (SchemaNode tmpNode : tmpNodes) {
+				if (!map.containsKey(tmpNode)) {
+					stack.push(tmpNode);					
+				}
+			}
+		}
+		System.out.println("总的节点数："+count);
 	}
 }
 

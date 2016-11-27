@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import common.IDeltaDebug;
-import common.ILocateFault;
+import base.IDeltaDebug;
+import base.ILocateFault;
 import common.Util;
 
 /**

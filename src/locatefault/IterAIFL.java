@@ -3,7 +3,7 @@ package locatefault;
 import java.util.ArrayList;
 import java.util.List;
 
-import common.ILocateFault;
+import base.ILocateFault;
 import common.Util;
 
 public class IterAIFL implements ILocateFault {

@@ -12,4 +12,6 @@ public interface Configure {
 	public static final String RI_MUL = "RI_MUL";
 	public static final String SRI = "SRI";
 	public static final String SRI_MUL = "SRI_MUL";
+	public static final String DFSTRT = "DFSTRT";
+	public static final String LPTRT = "LPTRT";
 }

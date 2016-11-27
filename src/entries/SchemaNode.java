@@ -1,26 +1,27 @@
 package entries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import locatefault.SchemaTreeStrategy;
+import common.Util;
+import locatefault.Trt;
 
+/**
+ * 关系树模型节点
+ * @author lglyoung
+ *
+ */
 public class SchemaNode {
-	private int[] testcase;
-	private List<SchemaNode> parents = new ArrayList<SchemaNode>();
-	private List<SchemaNode> children = new ArrayList<SchemaNode>();
+	private int[] sche;
+	private List<SchemaNode> directParents = new ArrayList<SchemaNode>();	//直接父亲节点
+	private List<SchemaNode> directChildren = new ArrayList<SchemaNode>();	//直接孩子节点
 	private String state;
-	private boolean isInDeque;	//用来标识相同的子节点是否进栈或队列
 	
-	public SchemaNode() {
+	public SchemaNode(int[] sche) {
 		super();
-	}
-	
-	public SchemaNode(int[] testcase) {
-		super();
-		this.testcase = testcase;
-		this.state = SchemaTreeStrategy.UNKNOW;
-		this.isInDeque = false;
+		this.sche = sche;
+		this.state = Trt.UNKNOW;
 	}
 	
 	/**
@@ -28,8 +29,8 @@ public class SchemaNode {
 	 * @param parent
 	 * @return
 	 */
-	public boolean addParent(SchemaNode parent) {
-		return parents.add(parent);
+	public boolean addDirectParent(SchemaNode parent) {
+		return directParents.add(parent);
 	}
 	
 	/**
@@ -37,24 +38,26 @@ public class SchemaNode {
 	 * @param child
 	 * @return
 	 */
-	public boolean addChild(SchemaNode child) {
-		return children.add(child);
+	public boolean addDirectChild(SchemaNode child) {
+		return directChildren.add(child);
 	}
 	
-	public List<SchemaNode> getParents() {
-		return parents;
+	public List<SchemaNode> getDirectParents() {
+		return directParents;
 	}
 
-	public List<SchemaNode> getChildren() {
-		return children;
+	public List<SchemaNode> getDirectChildren() {
+		return directChildren;
 	}
 
-	public int[] getTestcase() {
-		return testcase;
+	public int[] getSche() {
+		return sche;
 	}
-	public void setTestcase(int[] testcase) {
-		this.testcase = testcase;
+
+	public void setSche(int[] sche) {
+		this.sche = sche;
 	}
+
 	public String getState() {
 		return state;
 	}
@@ -62,11 +65,26 @@ public class SchemaNode {
 		this.state = state;
 	}
 
-	public boolean isInDeque() {
-		return isInDeque;
+	@Override
+	public int hashCode() {
+		return Util.intArrayToStr(sche).hashCode();
 	}
 
-	public void setInDeque(boolean isInDeque) {
-		this.isInDeque = isInDeque;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SchemaNode) {
+			SchemaNode sn = (SchemaNode) obj;
+			String str1 = Util.intArrayToStr(sche);
+			String str2 = Util.intArrayToStr(sn.getSche());
+			return str1.equals(str2);
+		}
+		return false;
 	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(sche) + " " + state;
+	}
+	
+	
 }

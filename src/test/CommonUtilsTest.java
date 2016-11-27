@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,8 +21,8 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
+import base.ILocateFault;
 import common.DataHelper;
-import common.ILocateFault;
 import common.Util;
 import locatefault.IterAIFL;
 
@@ -163,16 +165,10 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void test() {
-		List<Integer> params = new ArrayList<Integer>();
-		params.add(1);
-		params.add(2);
-		params.add(3);
-		params.add(4);
-		params.add(5);
-		params.add(6);
-		List<List<Integer>> groups = Util.paramGroups(params, 2);
-		for (List<Integer> tmpg : groups) {
-			System.out.println(tmpg);
-		}
+		Deque<Integer> s = new ArrayDeque<Integer>();
+		s.push(1);
+		System.out.println(s.peek());
+		System.out.println(s.pop());
 	}
+	
 }

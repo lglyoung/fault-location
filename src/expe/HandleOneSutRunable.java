@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import base.ILocateFault;
 import common.DataHelper;
-import common.ILocateFault;
 import common.ResultHandler;
 import common.Util;
 
@@ -19,7 +19,7 @@ public class HandleOneSutRunable implements Runnable {
 	private String ctToolName;				//组合测试工具名
 	private int lenOfCt;					//多少维的组合测试
 	private ILocateFault locateFault;		//故障定位方法
-	private BlockingQueue<String> bq;	//阻塞队列，存放文件名集合
+	private BlockingQueue<String> bq;		//阻塞队列，存放文件名集合
 	private ResultHandler rh;
 	
 	public HandleOneSutRunable(ILocateFault locateFault, DataHelper dh, 
@@ -53,6 +53,9 @@ public class HandleOneSutRunable implements Runnable {
 				
 				//故障定位
 				locateFault.locateFault(valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+				
+				System.out.println(Thread.currentThread().getName()+":"+fcasFailtestFileName);
+				
 				String mfsFileName = fcasFailtestFileName.substring(0, fcasFailtestFileName.lastIndexOf("."))+"_MFS.txt";
 				double hr = Util.hitRate(dh.getAllFtcsOrMfs(mfsFileName, false), faultSchemas);
 				rh.sum(extraTcs, faultSchemas, hr);

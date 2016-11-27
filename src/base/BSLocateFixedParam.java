@@ -1,7 +1,9 @@
-package common;
+package base;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import common.Util;
 
 /**
  * 二分法查找故障模式的某一个固定参数

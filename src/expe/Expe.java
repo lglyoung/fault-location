@@ -14,8 +14,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import javax.crypto.spec.DHGenParameterSpec;
+
+import base.ILocateFault;
 import common.DataHelper;
-import common.ILocateFault;
 import common.ResultHandler;
 import common.Util;
 
@@ -48,6 +50,8 @@ public class Expe {
 		expe.resultPath = rootPath + "/FL_RESULT/";
 		System.out.println("starting...");
 		long start = System.currentTimeMillis();
+		
+		//关键调用
 		expe.doExpe2(LocateFaultFactory.getProxyInstance(args[1]), args[1], "Tconfig", 4);
 		System.out.println("end!"+(System.currentTimeMillis()-start));
 	}
@@ -101,6 +105,8 @@ public class Expe {
 			}
 			
 			extraTcSum += extraTcs.size();	
+			
+			System.out.println(tmpStr);
 		}
 		System.out.println("平均命中率：" + sum / fcasFailtestFileNames.size());
 		System.out.println("总的附加测试用例数：" + extraTcSum);

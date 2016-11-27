@@ -1,6 +1,8 @@
-package common;
+package base;
 
 import java.util.List;
+
+import common.Util;
 
 public class LocateFixedParam implements ILocateFixedParam {
 
