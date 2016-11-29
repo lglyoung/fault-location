@@ -12,7 +12,8 @@ import org.junit.Test;
 import base.ILocateFault;
 import baseimpl.BSLocateFixedParam;
 import baseimpl.CompleteScheTree;
-import baseimpl.LPSelectUnknowNode;
+import baseimpl.CuttedByFicScheTree;
+import baseimpl.GreedSelectUnknowNode;
 import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
@@ -34,8 +35,8 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private String curBoolExp = "TCAS12LRF85";
-	private ILocateFault strategy;
+	private String curBoolExp = "TCAS20ASF2";//"TCAS12LRF85";
+	private ILocateFault faultLocate;
 	
 	@Before
 	public void before() throws IOException {
@@ -46,7 +47,7 @@ public class FaultLocationTest {
 		dh = new DataHelper(tcasFailtestPath, tcasMfsPath, ctsPath);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
-		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_2.txt");
+		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_4.txt");
 		ptcs = Util.arrDiffSet(cts, affFtcs);
 		ftcs = Util.arrDiffSet(cts, ptcs);
 		extraTcs = new ArrayList<int[]>();
@@ -57,43 +58,48 @@ public class FaultLocationTest {
 	
 	@Test
 	public void simplificationTest() {
-		strategy = new DeltaDebugMul(new Simplification());
+		faultLocate = new DeltaDebugMul(new Simplification());
 	}
 	
 	@Test
 	public void riTest() {
-		strategy = new DeltaDebug(new Ri());
+		faultLocate = new DeltaDebug(new Ri());
 	}
 	
 
 	@Test
 	public void sriTest() {
-		strategy = new DeltaDebug(new Sri());
+		faultLocate = new DeltaDebug(new Sri());
 	}
 	
 	@Test
 	public void iterAIFLTest() {
-		strategy = new IterAIFL();
+		faultLocate = new IterAIFL();
 	}
 	
 	@Test
 	public void schemaTreeTest() {
-		strategy = new Trt(new CompleteScheTree(), new LPSelectUnknowNode());
+		faultLocate = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
+	}
+	
+	@Test
+	public void cuttedSchemaTreeTest() {
+		faultLocate = new Trt(new CuttedByFicScheTree(new BSLocateFixedParam()), new GreedSelectUnknowNode());
 	}
 	
 	@Test
 	public void finovlpTest() {
-		strategy = new Fic(new BSLocateFixedParam());
+		faultLocate = new Fic(new BSLocateFixedParam());
 	}
 	
 	@Test
 	public void factoryTest() {
-		strategy = LocateFaultFactory.getProxyInstance(Configure.SRI_MUL);
+		faultLocate = LocateFaultFactory.getProxyInstance(Configure.SRI_MUL);
 	}
 	
 	@After
 	public void after() throws IOException {
-		strategy.locateFault(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
+		faultLocate.locateFault(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 		
 		//计算命中率
 		System.out.println("命中率："+
@@ -106,11 +112,7 @@ public class FaultLocationTest {
 		
 		//附加测试用例数
 		System.out.println("附加测试用例数：" + extraTcs.size());	
-		
-		System.out.println("MFS：");
-		for (int[] mfs : faultSchemas) {
-			System.out.println(Arrays.toString(mfs));
-		}
+
 	}
 
 	

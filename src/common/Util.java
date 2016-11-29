@@ -19,7 +19,9 @@ import java.util.Random;
 import java.util.Set;
 
 import base.ILocateFixedParam;
+import baseimpl.CompleteScheTree;
 import entries.SchemaNode;
+import locatefault.Trt;
 
 public class Util {
 	/**
@@ -719,6 +721,8 @@ public class Util {
 		}
 		System.out.println("总的节点数："+count);
 	}
+
+
 }
 
 

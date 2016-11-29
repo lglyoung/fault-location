@@ -21,7 +21,8 @@ import locatefault.Trt;
 public class CompleteScheTree implements ICreateScheTree {
 
 	@Override
-	public SchemaNode create(int[] ftc, List<int[]> ptcs) {
+	public SchemaNode create(int[] ftc, int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
+			List<int[]> faultSchemas) {
 		//创建关系树
 		SchemaNode head = createSchemaTree(ftc);
 
@@ -36,15 +37,15 @@ public class CompleteScheTree implements ICreateScheTree {
 	 * @param ftc
 	 * @return SchemaNode 树的头节点
 	 */
-	public SchemaNode createSchemaTree(int[] ftc) {
+	private SchemaNode createSchemaTree(int[] ftc) {
 		SchemaNode headNode = new SchemaNode(ftc);				//创建树的根节点
 		headNode.setState(Trt.FAIL);								
 		Deque<SchemaNode> stack = new ArrayDeque<SchemaNode>(Trt.STACK_INIT_SIZE);	//栈
 		Map<SchemaNode, SchemaNode> map = new HashMap<SchemaNode, SchemaNode>();	//保存已经生成的节点，目的是去重，用Map而不用Set的目的是方便取到已经存在的节点	
 		stack.push(headNode);
+		map.put(headNode, headNode);								//保存已经生成的节点
 		while(!stack.isEmpty()) {
 			SchemaNode popNode = stack.pop();
-			map.put(popNode, popNode);								//保存已经生成的节点
 			//如果当前弹出模式长度不为1，则生成子节点
 			if (Util.schemaLen(popNode.getSche()) > 1) {
 				List<SchemaNode> subNodes = genSubNodes(popNode);	//获取当前弹出节点的直接子模式
@@ -54,6 +55,7 @@ public class CompleteScheTree implements ICreateScheTree {
 					SchemaNode tmpNode = subNodes.get(i);
 					if (!map.containsKey(tmpNode)) { 	//未生成该子节点
 						stack.push(tmpNode);
+						map.put(tmpNode, tmpNode);
 					} else {						//已生成该子节点
 						//将tmpNode指向之前已经创建的节点对象
 						tmpNode = map.get(tmpNode);
@@ -74,7 +76,7 @@ public class CompleteScheTree implements ICreateScheTree {
 	 * @param node
 	 * @return List<SchemaNode>
 	 */
-	private List<SchemaNode> genSubNodes(SchemaNode node) {
+	public static List<SchemaNode> genSubNodes(SchemaNode node) {
 		List<SchemaNode> subNodes = new ArrayList<SchemaNode>();
 		int[] sche = node.getSche();
 		
@@ -131,7 +133,7 @@ public class CompleteScheTree implements ICreateScheTree {
 	 * 测试用例是否匹配到当前模式
 	 * @return
 	 */
-	private boolean isMatchSche(int[] tc, SchemaNode node) {
+	public static boolean isMatchSche(int[] tc, SchemaNode node) {
 		int[] sche = node.getSche();
 		for (int i = 0; i < tc.length; i++) {
 			if (tc[i] != sche[i] && sche[i] != -1) return false;

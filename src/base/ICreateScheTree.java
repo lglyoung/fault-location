@@ -11,6 +11,7 @@ import entries.SchemaNode;
  */
 public interface ICreateScheTree {
 
-	public SchemaNode create(int[] ftc, List<int[]> ptcs);
+	public SchemaNode create(int[] ftc, int[] valuesOfEachParam, List<int[]> allFtcs, List<int[]> ftcs, List<int[]> ptcs, List<int[]> extraTcs,
+			List<int[]> faultSchemas);
 	
 }
