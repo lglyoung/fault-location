@@ -9,12 +9,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import base.BSLocateFixedParam;
-import base.DFSSelectUnknowNode;
 import base.ILocateFault;
-import base.Ri;
-import base.Simplification;
-import base.Sri;
+import baseimpl.BSLocateFixedParam;
+import baseimpl.CompleteScheTree;
+import baseimpl.LPSelectUnknowNode;
+import baseimpl.Ri;
+import baseimpl.Simplification;
+import baseimpl.Sri;
 import common.Configure;
 import common.DataHelper;
 import common.Util;
@@ -33,7 +34,7 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private String curBoolExp = "TCAS12LRF85"; 		//"TCAS12LRF85";
+	private String curBoolExp = "TCAS12LRF85";
 	private ILocateFault strategy;
 	
 	@Before
@@ -77,7 +78,7 @@ public class FaultLocationTest {
 	
 	@Test
 	public void schemaTreeTest() {
-		strategy = new Trt(new DFSSelectUnknowNode());
+		strategy = new Trt(new CompleteScheTree(), new LPSelectUnknowNode());
 	}
 	
 	@Test
@@ -110,6 +111,7 @@ public class FaultLocationTest {
 		for (int[] mfs : faultSchemas) {
 			System.out.println(Arrays.toString(mfs));
 		}
-	}	
+	}
+
 	
 }

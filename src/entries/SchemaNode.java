@@ -1,8 +1,12 @@
 package entries;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import common.Util;
 import locatefault.Trt;
@@ -17,6 +21,7 @@ public class SchemaNode {
 	private List<SchemaNode> directParents = new ArrayList<SchemaNode>();	//直接父亲节点
 	private List<SchemaNode> directChildren = new ArrayList<SchemaNode>();	//直接孩子节点
 	private String state;
+	private int greedVal;				//节点的贪心值
 	
 	public SchemaNode(int[] sche) {
 		super();
@@ -85,6 +90,59 @@ public class SchemaNode {
 	public String toString() {
 		return Arrays.toString(sche) + " " + state;
 	}
+
+	public int getGreedVal() {
+		return greedVal;
+	}
+
+	/**
+	 * 设置贪心值
+	 */
+	public void setGreedVal() {
+		greedVal = !state.equals(Trt.UNKNOW) ? -1 : calculateGreedVal(this);
+	}
 	
+	/**
+	 * 计算一个未知节点的贪心值
+	 * @param node
+	 * @return
+	 */
+	private int calculateGreedVal(SchemaNode node) {
+		return Math.min(calculateUnknowNodes(node, true), calculateUnknowNodes(node, false));
+	}
+	
+	/**
+	 * 计算一个未知节点的未知父节点数或未知子节点数
+	 * @param node
+	 * @param isParent 为true，则计算的是父节点，否则计算子节点
+	 * @return
+	 */
+	private int calculateUnknowNodes(SchemaNode node, boolean isParent) {
+		Deque<SchemaNode> stack = new ArrayDeque<SchemaNode>(Trt.STACK_INIT_SIZE);
+		stack.push(node);
+		SchemaNode popNode = null, tmpNode = null;
+		List<SchemaNode> nodes = null;
+		Map<SchemaNode, SchemaNode> map = new HashMap<SchemaNode, SchemaNode>();	//保存已经生成的节点，目的是去重，用Map而不用Set的目的是方便取到已经存在的节点	
+		map.put(node, node);
+		int num = -1;
+		while (!stack.isEmpty()) {
+			popNode = stack.pop();
+			
+			//处理
+			num++;
+			
+			nodes = isParent ? popNode.getDirectParents() : popNode.getDirectChildren();
+			for (int i = nodes.size() - 1; i >= 0; i--) {
+				tmpNode = nodes.get(i);
+				if (!map.containsKey(tmpNode) && tmpNode.getState().equals(Trt.UNKNOW)) {
+					stack.push(tmpNode);
+					map.put(tmpNode, tmpNode);
+				}
+			}
+			
+		}
+		return num;
+	}
+
 	
 }

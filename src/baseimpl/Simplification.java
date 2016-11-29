@@ -1,9 +1,10 @@
-package base;
+package baseimpl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import base.IDeltaDebug;
 import common.Util;
 
 public class Simplification implements IDeltaDebug {

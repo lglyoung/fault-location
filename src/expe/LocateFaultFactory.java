@@ -1,13 +1,16 @@
 package expe;
 
-import base.BSLocateFixedParam;
-import base.DFSSelectUnknowNode;
 import base.ILocateFault;
-import base.LPSelectUnknowNode;
-import base.LocateFixedParam;
-import base.Ri;
-import base.Simplification;
-import base.Sri;
+import baseimpl.BFSSelectUnknowNode;
+import baseimpl.BSLocateFixedParam;
+import baseimpl.CompleteScheTree;
+import baseimpl.DFSSelectUnknowNode;
+import baseimpl.GreedSelectUnknowNode;
+import baseimpl.LPSelectUnknowNode;
+import baseimpl.LocateFixedParam;
+import baseimpl.Ri;
+import baseimpl.Simplification;
+import baseimpl.Sri;
 import common.Configure;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
@@ -51,10 +54,14 @@ public class LocateFaultFactory {
 			lf = new DeltaDebugMul(new Ri());
 		} else if (lfName.toUpperCase().equals(Configure.SRI_MUL)) {
 			lf = new DeltaDebugMul(new Sri());
-		} else if (lfName.toUpperCase().equals(Configure.DFSTRT)) {
-			lf = new Trt(new DFSSelectUnknowNode());
-		} else if (lfName.toUpperCase().equals(Configure.LPTRT)) {
-			lf = new Trt(new LPSelectUnknowNode());
+		} else if (lfName.toUpperCase().equals(Configure.COMPLETE_DFSTRT)) {
+			lf = new Trt(new CompleteScheTree(), new DFSSelectUnknowNode());
+		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_BFSTRT)) {
+			lf = new Trt(new CompleteScheTree(), new BFSSelectUnknowNode());
+		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_LPSTRT)) {
+			lf = new Trt(new CompleteScheTree(), new LPSelectUnknowNode());
+		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_GREEDSTRT)) {
+			lf = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
 		}
 		return new LocateFaultProxy(lf);
 	}
