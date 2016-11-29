@@ -12,7 +12,7 @@ import entries.SchemaNode;
  */
 public class CuttedScheTree implements ICreateScheTree {
 
-	@Override
+	@Override 
 	public SchemaNode create(int[] ftc, List<int[]> ptcs) {
 		
 		return null;
