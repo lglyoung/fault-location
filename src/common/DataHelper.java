@@ -8,11 +8,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 处理布尔表达式实验结果工具类
+ * @author lglyoung
+ *
+ */
 public class DataHelper {
+	private String rootPath;
 	private String tcasFailtestPath;	//保存布尔表达式的失效测试用例集的文件夹
 	private String tcasMfsPath;			//保存布尔表达式的MFS的文件夹
 	private String ctsPath;
 	private List<String> tcasFailtestFileNames = new ArrayList<String>();	//tcasFailtestPath文件夹下的所有文件名
+	private List<String> allBooleanExpr = new ArrayList<String>();			//所有的布尔表达式 
 	
 	/**
 	 * 构造器，读取文件，获取失效测试用例集的所有文件名
@@ -20,7 +27,8 @@ public class DataHelper {
 	 * @param tcasMfsPath
 	 * @throws IOException
 	 */
-	public DataHelper(String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
+	public DataHelper(String rootPath, String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
+		this.rootPath = rootPath;
 		this.tcasFailtestPath = tcasFailtestPath;
 		this.tcasMfsPath = tcasMfsPath;
 		this.ctsPath = ctsPath;
@@ -29,6 +37,7 @@ public class DataHelper {
 		String line = br.readLine();
 		while (line != null) {
 			tcasFailtestFileNames.add(line);
+			allBooleanExpr.add(line.split(".txt")[0]);
 			line = br.readLine();
 		}
 		br.close();
@@ -52,6 +61,10 @@ public class DataHelper {
 	
 	public String getCtsPath() {
 		return ctsPath;
+	}
+	
+	public String getRootPath() {
+		return rootPath;
 	}
 
 	/**

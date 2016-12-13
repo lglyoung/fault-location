@@ -19,9 +19,7 @@ import java.util.Random;
 import java.util.Set;
 
 import base.ILocateFixedParam;
-import baseimpl.CompleteScheTree;
 import entries.SchemaNode;
-import locatefault.Trt;
 
 public class Util {
 	/**

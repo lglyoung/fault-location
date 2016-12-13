@@ -11,7 +11,7 @@ import baseimpl.LocateFixedParam;
 import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
-import common.Configure;
+import common.LfName;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
@@ -27,41 +27,70 @@ import locatefault.Trt;
 public class LocateFaultFactory {
 	/**
 	 * 获取ILocateFault代理类实例
-	 * @param lfName
+	 * @param name 故障定位方法的字符串名称
 	 * @return
 	 */
-	public static ILocateFault getProxyInstance(String lfName) {
+	public static ILocateFault getProxyInstance(String name) {
 		ILocateFault lf = null;
-		if (lfName.toUpperCase().equals(Configure.ITERAIFL)) {
+		LfName lfNameEnum = LfName.getLfName(name);
+		if (lfNameEnum == null) {
+			throw new RuntimeException("ERROR: 没有"+name+"故障定位方法，可能是字符串写错了");
+		}
+		
+		//创建故障定位方法对象
+		switch (lfNameEnum) {
+			//IterAIFL算法
+		case ITERAIFL:
 			lf = new IterAIFL();
-		} else if (lfName.toUpperCase().equals(Configure.FIC)) {
+			break;
+			
+			//FIC算法
+		case FIC:
 			lf = new Fic(new LocateFixedParam());
-		} else if (lfName.toUpperCase().equals(Configure.FIC_BS)) {
+			break;
+		case FIC_BS:
 			lf = new Fic(new BSLocateFixedParam());
-		} else if (lfName.toUpperCase().equals(Configure.FINOVLP)) {
+			break;
+		case FINOVLP:
 			lf = new Finovlp(new LocateFixedParam());
-		} else if (lfName.toUpperCase().equals(Configure.FINOVLP_BS)) {
+			break;
+		case FINOVLP_BS:
 			lf = new Finovlp(new BSLocateFixedParam());
-		} else if (lfName.toUpperCase().equals(Configure.SIMPLIFICATION)) {
+			break;
+		
+			//差异定位算法
+		case SIMPLIFICATION:
 			lf = new DeltaDebug(new Simplification());
-		} else if (lfName.toUpperCase().equals(Configure.RI)) {
-			lf = new DeltaDebug(new Ri());
-		} else if (lfName.toUpperCase().equals(Configure.SRI)) {
-			lf = new DeltaDebug(new Sri());
-		} else if (lfName.toUpperCase().equals(Configure.SIMPLIFICATION_MUL)) {
+			break;	
+		case SIMPLIFICATION_MUL:
 			lf = new DeltaDebugMul(new Simplification());
-		} else if (lfName.toUpperCase().equals(Configure.RI_MUL)) {
+			break;
+		case RI:
+			lf = new DeltaDebug(new Ri());
+			break;	
+		case RI_MUL:
 			lf = new DeltaDebugMul(new Ri());
-		} else if (lfName.toUpperCase().equals(Configure.SRI_MUL)) {
+			break;
+		case SRI:
+			lf = new DeltaDebug(new Sri());
+			break;	
+		case SRI_MUL:
 			lf = new DeltaDebugMul(new Sri());
-		} else if (lfName.toUpperCase().equals(Configure.COMPLETE_DFSTRT)) {
+			break;
+			
+			//关系树模型
+		case COMPLETE_DFSTRT:
 			lf = new Trt(new CompleteScheTree(), new DFSSelectUnknowNode());
-		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_BFSTRT)) {
+			break;	
+		case COMPLETE_BFSTRT:
 			lf = new Trt(new CompleteScheTree(), new BFSSelectUnknowNode());
-		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_LPSTRT)) {
+			break;	
+		case COMPLETE_LPTRT:
 			lf = new Trt(new CompleteScheTree(), new LPSelectUnknowNode());
-		}  else if (lfName.toUpperCase().equals(Configure.COMPLETE_GREEDSTRT)) {
+			break;	
+		case COMPLETE_GREEDTRT:
 			lf = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
+			break;	
 		}
 		return new LocateFaultProxy(lf);
 	}

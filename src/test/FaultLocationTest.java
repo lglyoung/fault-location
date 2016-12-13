@@ -2,7 +2,6 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -13,12 +12,17 @@ import base.ILocateFault;
 import baseimpl.BSLocateFixedParam;
 import baseimpl.CompleteScheTree;
 import baseimpl.CuttedByFicScheTree;
+import baseimpl.DFSSelectUnknowNode;
 import baseimpl.GreedSelectUnknowNode;
 import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
 import common.Configure;
+import common.CtToolName;
 import common.DataHelper;
+import common.LfName;
+import common.ResultHandler;
+import common.ResultType;
 import common.Util;
 import expe.LocateFaultFactory;
 import locatefault.DeltaDebug;
@@ -29,6 +33,7 @@ import locatefault.Trt;
 
 public class FaultLocationTest {
 	private DataHelper dh;
+	private ResultHandler rh;
 	private int[] valuesOfEachParam;
 	private List<int[]> affFtcs;
 	private List<int[]> ftcs;
@@ -40,11 +45,12 @@ public class FaultLocationTest {
 	
 	@Before
 	public void before() throws IOException {
-		String rootPath = "D:\\Files\\测试\\BoolExperiment\\";
-		String tcasFailtestPath = rootPath + "TCAS_FAILTEST\\";
-		String tcasMfsPath = rootPath + "TCAS_MFS\\";
-		String ctsPath = rootPath + "CTS\\Tconfig\\";
-		dh = new DataHelper(tcasFailtestPath, tcasMfsPath, ctsPath);
+		String rootPath = "D:/Files/测试/BoolExperiment/";
+		String tcasFailtestPath = rootPath + "TCAS_FAILTEST/";
+		String tcasMfsPath = rootPath + "TCAS_MFS/";
+		String ctsPath = rootPath + "CTS/Tconfig/";
+		dh = new DataHelper(rootPath, tcasFailtestPath, tcasMfsPath, ctsPath);
+		rh = new ResultHandler(dh);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
 		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_4.txt");
@@ -79,7 +85,7 @@ public class FaultLocationTest {
 	
 	@Test
 	public void schemaTreeTest() {
-		faultLocate = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
+		faultLocate = new Trt(new CompleteScheTree(), new DFSSelectUnknowNode());
 	}
 	
 	@Test
@@ -88,7 +94,7 @@ public class FaultLocationTest {
 	}
 	
 	@Test
-	public void finovlpTest() {
+	public void finovlpTest() throws IOException {
 		faultLocate = new Fic(new BSLocateFixedParam());
 	}
 	
@@ -100,7 +106,9 @@ public class FaultLocationTest {
 	@After
 	public void after() throws IOException {
 		faultLocate.locateFault(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
-		
+		ResultHandler rh = new ResultHandler(dh);
+		rh.saveResult(LfName.FIC_BS, CtToolName.TCONFIG, 4, ResultType.ExtraTc, curBoolExp, extraTcs);
+	
 		//计算命中率
 		System.out.println("命中率："+
 				Util.hitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
@@ -112,8 +120,7 @@ public class FaultLocationTest {
 		
 		//附加测试用例数
 		System.out.println("附加测试用例数：" + extraTcs.size());	
-
+		
 	}
-
 	
 }

@@ -41,7 +41,6 @@ public class Trt implements ILocateFault {
 			//创建并初始化关系模式树
 			SchemaNode head = createScheTree.create(ftc, valuesOfEachParam, allFtcs, ftcs, ptcs, extraTcs, faultSchemas);
 			
-			Util.dfsTrt(head);
 			//挑选待测模式
 			Deque<SchemaNode> stack = new ArrayDeque<SchemaNode>(STACK_INIT_SIZE);	//栈
 			do {

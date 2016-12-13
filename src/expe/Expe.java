@@ -29,12 +29,13 @@ public class Expe {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private ResultHandler rh = new ResultHandler();	//处理实验结果
+	private ResultHandler rh = new ResultHandler(dh);	//处理实验结果
 
 	
 	/**
 	 * args[0]：实验数据的根目录
 	 * args[1]: 故障定位方法的名称，不区分大小写
+	 * args[2]: 组合测试工具的名称："TCONFIG" "PICT" "TVG"
 	 * @param args
 	 * @throws IOException
 	 * @throws InterruptedException 
@@ -44,13 +45,13 @@ public class Expe {
 		String tcasFailtestPath = rootPath + "/TCAS_FAILTEST/";
 		String tcasMfsPath = rootPath + "/TCAS_MFS/";
 		String ctsPath = rootPath + "/CTS/";
-		Expe expe = new Expe(tcasFailtestPath, tcasMfsPath, ctsPath);
+		Expe expe = new Expe(rootPath, tcasFailtestPath, tcasMfsPath, ctsPath);
 		expe.resultPath = rootPath + "/FL_RESULT/";
 		System.out.println("starting...");
 		long start = System.currentTimeMillis();
 		
 		//关键调用
-		expe.doExpe2(LocateFaultFactory.getProxyInstance(args[1]), args[1], "Tconfig", 4);
+		expe.doExpe2(LocateFaultFactory.getProxyInstance(args[1]), args[1], "TCONFIG", 4);
 		System.out.println("end!"+(System.currentTimeMillis()-start));
 	}
 
@@ -61,14 +62,17 @@ public class Expe {
 	 * @param ctsPath
 	 * @throws IOException
 	 */
-	public Expe(String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
+	public Expe(String rootPath, String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
 		this.ctsPath = ctsPath;
-		dh = new DataHelper(tcasFailtestPath, tcasMfsPath, ctsPath);
+		dh = new DataHelper(rootPath, tcasFailtestPath, tcasMfsPath, ctsPath);
 	}
 	
 	/**
 	 * 做实验(单线程版)
-	 * @throws IOException 
+	 * @param locateFault 故障定位方法的实例
+	 * @param resFileName 保存实验结果的文件名
+	 * @param ctToolName 组合测试用例工具名
+	 * @throws IOException
 	 */
 	public void doExpe(ILocateFault locateFault, String resFileName, String ctToolName) throws IOException {
 		//获取所有的保存失效测试用例集的文件名
@@ -116,7 +120,7 @@ public class Expe {
 	/**
 	 * 做实验(多线程版)
 	 * @param locateFault	故障定位方法
-	 * @param resFileName	保存结果的文件名	
+	 * @param resFileName	保存实验结果的文件名	
 	 * @param lenOfCt		组合测试用例的维度
 	 * @throws IOException
 	 * @throws InterruptedException 

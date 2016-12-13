@@ -19,9 +19,8 @@ public interface Configure {
 	public static final String SRI_MUL = "SRI_MUL";
 	
 	//关系数模型
-	public static final String COMPLETE_DFSTRT = "COMPLETE_DFSTRT";
-	public static final String COMPLETE_LPTRT = "COMPLETE_LPTRT";
-	public static final String COMPLETE_BFSTRT = "COMPLETE_BFSTRT";
-	public static final String COMPLETE_LPSTRT = "COMPLETE_LPSTRT";
-	public static final String COMPLETE_GREEDSTRT = "COMPLETE_GREEDSTRT";
+	public static final String COMPLETE_DFSTRT = "DFSTRT";
+	public static final String COMPLETE_BFSTRT = "BFSTRT";
+	public static final String COMPLETE_LPTRT = "LPTRT";
+	public static final String COMPLETE_GREEDTRT = "GREEDTRT";
 }

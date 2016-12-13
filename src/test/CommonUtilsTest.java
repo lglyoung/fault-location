@@ -10,10 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +21,7 @@ import org.junit.Test;
 
 import base.ILocateFault;
 import common.DataHelper;
+import common.ResultType;
 import common.Util;
 import locatefault.IterAIFL;
 
@@ -123,7 +122,7 @@ public class CommonUtilsTest {
 	public void dataHelperTest() throws IOException {
 		String tcasFailtestPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_FAILTEST\\";
 		String tcasMfsPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_MFS\\";
-		DataHelper dh = new DataHelper(tcasFailtestPath, tcasMfsPath, "");
+		DataHelper dh = new DataHelper("D:\\Files\\测试\\BoolExperiment\\", tcasFailtestPath, tcasMfsPath, "");
 		List<int[]> ftcs = dh.getAllFtcsOrMfs("TCAS1ASF1_MFS.txt", false);
 		for (int[] tmpftc : ftcs) {
 			System.out.println(Arrays.toString(tmpftc));
@@ -165,10 +164,30 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void test() {
-		Deque<Integer> s = new ArrayDeque<Integer>();
-		s.push(1);
-		System.out.println(s.peek());
-		System.out.println(s.pop());
+		int[] nums = {1, 1, 1, 1, 1};
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < nums.length - i -1; j++) {
+				if (nums[j] > nums[j+1]) {
+					int tmp = nums[j];
+					nums[j] = nums[j+1];
+					nums[j+1] = tmp;
+				}
+			}
+		}
+		System.out.println(nums[nums.length-2]);
+	}
+	
+	public int f(int[] nums) {
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < nums.length - i -1; j++) {
+				if (nums[j] > nums[j+1]) {
+					int tmp = nums[j];
+					nums[j] = nums[j+1];
+					nums[j+1] = tmp;
+				}
+			}
+		}
+		return nums[nums.length-2];
 	}
 	
 }
