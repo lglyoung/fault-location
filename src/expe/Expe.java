@@ -20,6 +20,7 @@ import common.ResultHandler;
 import common.Util;
 
 public class Expe {
+	public static int lenOfCt = -1;	//组合测试的维度
 	private String resultPath;		//保存实验结果的路径
 	private String ctsPath;			//组合测试用例的路径
 	private DataHelper dh;			//处理实验数据的助手类
@@ -51,7 +52,8 @@ public class Expe {
 		long start = System.currentTimeMillis();
 		
 		//关键调用
-		expe.doExpe2(LocateFaultFactory.getProxyInstance(args[1]), args[1], "TCONFIG", 4);
+		lenOfCt = 4;
+		expe.doExpe2(LocateFaultFactory.getProxyInstance(args[1]), args[1], "TCONFIG", lenOfCt);
 		System.out.println("end!"+(System.currentTimeMillis()-start));
 	}
 
@@ -134,12 +136,11 @@ public class Expe {
 		
 		//创建多个消费线程来处理实验
 		for (int i = 0; i < numOfProcessor+1; i++) {
-			
 			runners[i] = new Thread(new HandleOneSutRunable(locateFault, dh, bq, ctToolName, lenOfCt, rh));
 			es.submit(runners[i]);
 		}
 		es.shutdown();
-		es.awaitTermination(365, TimeUnit.DAYS);
+		es.awaitTermination(30, TimeUnit.DAYS);
 		rh.show(dh.getTcasFailtestFileNames().size());
 	}
 	

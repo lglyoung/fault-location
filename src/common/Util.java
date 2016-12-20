@@ -20,6 +20,7 @@ import java.util.Set;
 
 import base.ILocateFixedParam;
 import entries.SchemaNode;
+import locatefault.BooleanExpressLocateFault;
 
 public class Util {
 	/**
@@ -87,8 +88,31 @@ public class Util {
 			do{
 				newValue = random.nextInt(valuesOfEachParam[changedParam]);
 			}
-			while(newValue == extraTc[changedParam]);
+			while(newValue == extraTc[changedParam] && valuesOfEachParam[changedParam] > 1);
 			extraTc[changedParam] = newValue;
+		}
+		return extraTc;
+	}
+	
+	/**
+	 * 重载
+	 * @param valuesOfEachParam
+	 * @param ftc
+	 * @param schema
+	 * @return
+	 */
+	public static int[] genExtraTc(int[] valuesOfEachParam, int[] ftc, int[] schema) {
+		int[] extraTc = new int[ftc.length];
+		System.arraycopy(ftc, 0, extraTc, 0, ftc.length);
+		Random r = new Random();
+		int extraValue = 0;
+		for(int i = 0; i < schema.length; i++) {
+			if(schema[i] == -1) {
+				do {
+					extraValue = r.nextInt(valuesOfEachParam[i]); 
+				} while(extraValue == ftc[i] && valuesOfEachParam[i] > 1);
+				extraTc[i] = extraValue;
+			}
 		}
 		return extraTc;
 	}
@@ -476,7 +500,7 @@ public class Util {
 				if (b[i] != -1) return false;
 			}
 		}
-		return a.length > 0 ? true : false;
+		return true;
 	}
 
 	/**
@@ -720,6 +744,50 @@ public class Util {
 		System.out.println("总的节点数："+count);
 	}
 
+	/**
+	 * 生成模式的所有直接子模式
+	 * 思路：	1、遍历的次数是参数的个数（数组长度）
+	 * 		2、如果当前参数的值是一个具体的值，则复制数组，并将对应的值赋值为-1
+	 * @param schema
+	 * @return
+	 */
+	public static List<int[]> genDirectSubSchemas(int[] schema) {
+		List<int[]> sches = new ArrayList<int[]>();
+		for (int i = 0; i < schema.length; i++) {
+			if (schema[i] != -1) {
+				int[] copy = Arrays.copyOf(schema, schema.length);
+				copy[i] = -1;			//-1对应"-"，如[1, -1, 1] 《=》[1, -, 1]
+				sches.add(copy);
+			}
+		}
+		return sches;
+	}
+
+	/**
+	 * 根据已知的通过测试用例集，判断sche是否是健康模式，注意此时判断sche为非健康模式不代表sche就一定故障模式
+	 * @param sche
+	 * @param passExtraTcs
+	 * @return
+	 */
+	public static boolean isPassSche(int[] sche, List<int[]> passExtraTcs) {
+		for (int[] ptc : passExtraTcs) {
+			if (aHasSubScheB(ptc, sche)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 往失效测试用例集中添加新的失效测试用例
+	 * @param extraTc
+	 * @param ftcs
+	 * @param existFtcsSet 
+	 */
+	public static void addFailTc(int[] extraTc, List<int[]> ftcs, Set<String> existFtcsSet) {
+		if (!existFtcsSet.contains(intArrayToStr(extraTc))) {
+			ftcs.add(extraTc);
+			existFtcsSet.add(intArrayToStr(extraTc));
+		}
+	}
 
 }
 

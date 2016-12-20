@@ -12,6 +12,7 @@ import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
 import common.LfName;
+import locatefault.BooleanExpressLocateFault;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
@@ -91,6 +92,9 @@ public class LocateFaultFactory {
 		case COMPLETE_GREEDTRT:
 			lf = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
 			break;	
+		case BELF:
+			lf = new BooleanExpressLocateFault();
+			break;
 		}
 		return new LocateFaultProxy(lf);
 	}

@@ -10,7 +10,7 @@ import entries.SchemaNode;
  * @author lglyoung
  *
  */
-public interface ISelectUnknowNode {
+public interface ISelectUnknowNode {	
 	/**
 	 * 返回一个或多个状态未知的节点
 	 * @param stack 

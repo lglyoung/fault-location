@@ -23,4 +23,8 @@ public interface Configure {
 	public static final String COMPLETE_BFSTRT = "BFSTRT";
 	public static final String COMPLETE_LPTRT = "LPTRT";
 	public static final String COMPLETE_GREEDTRT = "GREEDTRT";
+	
+	//布尔表达式故障定位方法
+	public static final String BELF = "BELF";
+	
 }

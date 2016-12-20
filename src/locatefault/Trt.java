@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import base.ICreateScheTree;
 import base.ILocateFault;
@@ -54,7 +53,7 @@ public class Trt implements ILocateFault {
 					while (s <= e) {
 						m = bsSelect(s, e);
 						selectedSchemaNode = nodes.get(m);
-						extraTc = genExtraTc(valuesOfEachParam, ftc, selectedSchemaNode.getSche());
+						extraTc = Util.genExtraTc(valuesOfEachParam, ftc, selectedSchemaNode.getSche());
 						extraTcs.add(extraTc);
 						if (Util.isFailTc(extraTc, allFtcs, null)) {
 							selectedSchemaNode.setState(FAIL);
@@ -104,7 +103,7 @@ public class Trt implements ILocateFault {
 		boolean isAllMfss = true;
 		int[] extraTc = null;
 		for (SchemaNode tmpMfs : mfss) {
-			extraTc = genExtraTc(valuesOfEachParam, ftc, tmpMfs.getSche());
+			extraTc = Util.genExtraTc(valuesOfEachParam, ftc, tmpMfs.getSche());
 			extraTcs.add(extraTc);
 			if (!Util.isFailTc(extraTc, allFtcs, null)) {
 				tmpMfs.setState(PASS);
@@ -236,26 +235,4 @@ public class Trt implements ILocateFault {
 		}
 	}
 	
-	/**
-	 * 生成附加测试用例
-	 * @param valuesOfEachParam
-	 * @param ftc
-	 * @param schema
-	 * @return int[]
-	 */
-	private int[] genExtraTc(int[] valuesOfEachParam, int[] ftc, int[] schema) {
-		int[] extraTc = new int[ftc.length];
-		System.arraycopy(ftc, 0, extraTc, 0, ftc.length);
-		Random r = new Random();
-		int extraValue = 0;
-		for(int i = 0; i < schema.length; i++) {
-			if(schema[i] == -1) {
-				do {
-					extraValue = r.nextInt(valuesOfEachParam[i]); 
-				} while(extraValue == ftc[i] && valuesOfEachParam[i] > 1);
-				extraTc[i] = extraValue;
-			}
-		}
-		return extraTc;
-	}
 }

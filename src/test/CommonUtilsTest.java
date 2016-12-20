@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import base.ILocateFault;
 import common.DataHelper;
-import common.ResultType;
 import common.Util;
 import locatefault.IterAIFL;
 
@@ -164,30 +163,11 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void test() {
-		int[] nums = {1, 1, 1, 1, 1};
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < nums.length - i -1; j++) {
-				if (nums[j] > nums[j+1]) {
-					int tmp = nums[j];
-					nums[j] = nums[j+1];
-					nums[j+1] = tmp;
-				}
-			}
+		List<int[]> sches = Util.genDirectSubSchemas(new int[] {-1, -1, -1});
+		for (int[] sche : sches) {
+			System.out.println(Arrays.toString(sche));
 		}
-		System.out.println(nums[nums.length-2]);
 	}
 	
-	public int f(int[] nums) {
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < nums.length - i -1; j++) {
-				if (nums[j] > nums[j+1]) {
-					int tmp = nums[j];
-					nums[j] = nums[j+1];
-					nums[j+1] = tmp;
-				}
-			}
-		}
-		return nums[nums.length-2];
-	}
 	
 }

@@ -9,11 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import base.ILocateFault;
+import baseimpl.BFSSelectUnknowNode;
 import baseimpl.BSLocateFixedParam;
 import baseimpl.CompleteScheTree;
 import baseimpl.CuttedByFicScheTree;
-import baseimpl.DFSSelectUnknowNode;
 import baseimpl.GreedSelectUnknowNode;
+import baseimpl.LocateFixedParam;
 import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
@@ -24,7 +25,9 @@ import common.LfName;
 import common.ResultHandler;
 import common.ResultType;
 import common.Util;
+import expe.Expe;
 import expe.LocateFaultFactory;
+import locatefault.BooleanExpressLocateFault;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
 import locatefault.Fic;
@@ -40,7 +43,7 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private String curBoolExp = "TCAS20ASF2";//"TCAS12LRF85";
+	private String curBoolExp = "TCAS12LRF85";//"TCAS12LRF85";TCAS20ASF2
 	private ILocateFault faultLocate;
 	
 	@Before
@@ -85,7 +88,8 @@ public class FaultLocationTest {
 	
 	@Test
 	public void schemaTreeTest() {
-		faultLocate = new Trt(new CompleteScheTree(), new DFSSelectUnknowNode());
+		Expe.lenOfCt = 5;
+		faultLocate = new Trt(new CompleteScheTree(), new BFSSelectUnknowNode());
 	}
 	
 	@Test
@@ -95,7 +99,7 @@ public class FaultLocationTest {
 	
 	@Test
 	public void finovlpTest() throws IOException {
-		faultLocate = new Fic(new BSLocateFixedParam());
+		faultLocate = new Fic(new LocateFixedParam());
 	}
 	
 	@Test
@@ -103,18 +107,24 @@ public class FaultLocationTest {
 		faultLocate = LocateFaultFactory.getProxyInstance(Configure.SRI_MUL);
 	}
 	
+	@Test
+	public void booleanExpressLocateFaultTest() {
+		faultLocate = new BooleanExpressLocateFault();
+	}
+	
 	@After
 	public void after() throws IOException {
 		faultLocate.locateFault(valuesOfEachParam, affFtcs, ftcs, ptcs, extraTcs, faultSchemas);
-		ResultHandler rh = new ResultHandler(dh);
-		rh.saveResult(LfName.FIC_BS, CtToolName.TCONFIG, 4, ResultType.ExtraTc, curBoolExp, extraTcs);
-	
+		
+		//移除重复的附加测试用例
+		Util.delRepeat(extraTcs);
+		
 		//计算命中率
 		System.out.println("命中率："+
 				Util.hitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
 		
 		//不命中率
-		Util.removeParentSche(faultSchemas);
+		//Util.removeParentSche(faultSchemas);
 		System.out.println("错误率："+
 				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));		
 		
