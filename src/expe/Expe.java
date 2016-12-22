@@ -7,10 +7,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import base.IHandler;
+import baseimpl.SaveHandler;
 import common.CtToolName;
 import common.DataHelper;
 import common.LfName;
-import common.ResultHelper;
 import entries.Param;
 
 public class Expe {
@@ -21,20 +22,20 @@ public class Expe {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		DataHelper dataHelper = new DataHelper(System.getProperty("user.dir"));	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径
-		ResultHelper resultHelper = new ResultHelper(dataHelper);
+		DataHelper dataHelper = new DataHelper("D:/Files/测试/BoolExperiment/");	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径
 		
 		System.out.println("starting...");
 		
 		//关键调用
 		LfName[] lfNames = LfName.values();
-		int[] lenOfCts = {4};
+		int[] lenOfCts = {2, 3};
 		Param param = new Param();
+		IHandler saveHandler = new SaveHandler();	//保存中间数据handler
 		for (LfName lfName : lfNames) {
 			System.out.println(lfName.getName());
 			for (int lenOfCt : lenOfCts) {
-				param.set(LocateFaultFactory.getProxyInstance(lfName.getName()), 
-						dataHelper, lfName, CtToolName.TCONFIG, lenOfCt, resultHelper);
+				param.set(saveHandler, LocateFaultFactory.getProxyInstance(lfName.getName()), 
+						dataHelper, lfName, CtToolName.TCONFIG, lenOfCt);
 				doExpe(param);
 			}
 		}
@@ -49,7 +50,7 @@ public class Expe {
 	public static void doExpe(Param param) throws IOException, InterruptedException {
 		int numOfProcessor = Runtime.getRuntime().availableProcessors();
 		//阻塞队列，存放布尔表达式文件名
-		BlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(param.getDataHepler().getTcasFailtestFileNames());
+		BlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(param.getDataHepler().getTcasFailtestFileNames().subList(0, 100));
 		Runnable[] runners = new Runnable[numOfProcessor+1];
 		ExecutorService es = Executors.newFixedThreadPool(numOfProcessor+1);
 		
