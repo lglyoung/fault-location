@@ -5,7 +5,6 @@ import baseimpl.BFSSelectUnknowNode;
 import baseimpl.BSLocateFixedParam;
 import baseimpl.CompleteScheTree;
 import baseimpl.DFSSelectUnknowNode;
-import baseimpl.GreedSelectUnknowNode;
 import baseimpl.LPSelectUnknowNode;
 import baseimpl.LocateFixedParam;
 import baseimpl.Ri;
@@ -89,9 +88,9 @@ public class LocateFaultFactory {
 		case COMPLETE_LPTRT:
 			lf = new Trt(new CompleteScheTree(), new LPSelectUnknowNode());
 			break;	
-		case COMPLETE_GREEDTRT:
+		/*case COMPLETE_GREEDTRT:
 			lf = new Trt(new CompleteScheTree(), new GreedSelectUnknowNode());
-			break;	
+			break;	*/
 		case BELF:
 			lf = new BooleanExpressLocateFault();
 			break;

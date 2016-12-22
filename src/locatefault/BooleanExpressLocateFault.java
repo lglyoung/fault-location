@@ -44,7 +44,7 @@ public class BooleanExpressLocateFault implements ILocateFault {
 						extraTcs.add(extraTc);		//保存附加测试用例
 						if (Util.isFailTc(extraTc, allFtcs, null)) {
 							queue.offer(subSche);	//入列	
-							//Util.addFailTc(extraTc, ftcs, ftcsSet);
+							//Util.addFailTc(extraTc, ftcs, ftcsSet);	//将发现到的新的附加测试用例添加到失效测试用例集中
 							isMFS = false;			//只要有一个子模式是故障模式，那么当前出对列的故障模式就不是极小故障模式
 						} else {
 							passExtraTcs.add(extraTc);				

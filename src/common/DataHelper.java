@@ -14,24 +14,25 @@ import java.util.List;
  *
  */
 public class DataHelper {
-	private String rootPath;
+	private String rootPath;			//实验的根目录，如"D:/Files/测试/BoolExperiment/"
 	private String tcasFailtestPath;	//保存布尔表达式的失效测试用例集的文件夹
 	private String tcasMfsPath;			//保存布尔表达式的MFS的文件夹
-	private String ctsPath;
+	private String ctsPath;				//组合测试用例的文件集的路径
+	private String resultPath;			//保存实验结果的路径
 	private List<String> tcasFailtestFileNames = new ArrayList<String>();	//tcasFailtestPath文件夹下的所有文件名
 	private List<String> allBooleanExpr = new ArrayList<String>();			//所有的布尔表达式 
 	
 	/**
 	 * 构造器，读取文件，获取失效测试用例集的所有文件名
-	 * @param tcasFailtestPath
-	 * @param tcasMfsPath
 	 * @throws IOException
 	 */
-	public DataHelper(String rootPath, String tcasFailtestPath, String tcasMfsPath, String ctsPath) throws IOException {
+	public DataHelper(String rootPath) throws IOException {
 		this.rootPath = rootPath;
-		this.tcasFailtestPath = tcasFailtestPath;
-		this.tcasMfsPath = tcasMfsPath;
-		this.ctsPath = ctsPath;
+		tcasFailtestPath = rootPath + "/TCAS_FAILTEST/";
+		tcasMfsPath = rootPath + "/TCAS_MFS/";
+		ctsPath = rootPath + "/CTS/";
+		resultPath = rootPath + "/FL_RESULT/";
+
 		FileInputStream fi = new FileInputStream(tcasFailtestPath+"AllListFile.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(fi, "utf-8"));
 		String line = br.readLine();
@@ -67,9 +68,13 @@ public class DataHelper {
 		return rootPath;
 	}
 
+	public String getResultPath() {
+		return resultPath;
+	}
+
 	/**
 	 * 获取所有失效测试用例集或者MFS
-	 * @param tcasFailtestOfMfsFileName 如果mfs文件名，那么需要根据这个文件名获取对应的ftc文件名，从而获取valuesOfEachParam
+	 * @param tcasFailtestOfMfsFileName 如果是mfs文件名，那么需要根据这个文件名获取对应的ftc文件名，从而获取valuesOfEachParam
 	 * @param isGetAllFtcs 如果为true，则读取ftcs，否则读取mfs
 	 * @return
 	 * @throws IOException 
@@ -138,5 +143,51 @@ public class DataHelper {
 		br.close();
 		return null;
 	}
+
+	/**
+	 * 获取组合测试用例集
+	 * @param lfName 
+	 * @param params 布尔表达式参数的个数
+	 * @param lenOfCt 
+	 * @return
+	 * @throws IOException
+	 */
+	public List<int[]> genCts(CtToolName ctToolName, int params, int lenOfCt) throws IOException {
+		//组合测试用例集路径
+		String ctpath = ctsPath+"/"+ctToolName.getName()+
+				"/"+params+"_2_"+lenOfCt+".txt";
+		List<int[]> cts = new ArrayList<int[]>();
+		
+		//根据文件名获取测试用例的长度
+		File f = new File(ctpath);
+		int numsOfParam = Integer.parseInt(f.getName().split("_")[0]);
+		
+		FileInputStream fi = new FileInputStream(ctpath);
+		BufferedReader br = new BufferedReader(new InputStreamReader(fi, "utf-8"));
+		String line = br.readLine();
+		while (line != null) {
+			String tmpStr = line.split("\\|")[1].replaceAll(" ", "");
+			int[] tmpCt = new int[numsOfParam];
+			for (int i = 0; i < numsOfParam; i++) {
+				if (tmpStr.charAt(i) == '-') {			//用0表示'-'
+					tmpCt[i] = 0;
+				} else {
+					tmpCt[i] = Integer.parseInt(tmpStr.substring(i, i+1))-1;
+				}
+			}
+			cts.add(tmpCt);
+			line = br.readLine();
+		}
+		br.close();
+		return cts;
+	}
 	
+	/**
+	 * 根据失效测试用例集的文件名获取MFS的文件名
+	 * @param fcasFailtestFileName 保存失效测试用例集的文件名
+	 * @return
+	 */
+	public String getMfsFileName(String fcasFailtestFileName) {
+		 return fcasFailtestFileName.substring(0, fcasFailtestFileName.lastIndexOf("."))+"_MFS.txt";
+	}
 }

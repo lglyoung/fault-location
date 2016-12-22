@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import org.junit.Test;
 
 import base.ILocateFault;
+import common.CtToolName;
 import common.DataHelper;
 import common.Util;
 import locatefault.IterAIFL;
@@ -119,9 +120,7 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void dataHelperTest() throws IOException {
-		String tcasFailtestPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_FAILTEST\\";
-		String tcasMfsPath = "D:\\Files\\测试\\BoolExperiment\\TCAS_MFS\\";
-		DataHelper dh = new DataHelper("D:\\Files\\测试\\BoolExperiment\\", tcasFailtestPath, tcasMfsPath, "");
+		DataHelper dh = new DataHelper("D:\\Files\\测试\\BoolExperiment\\");
 		List<int[]> ftcs = dh.getAllFtcsOrMfs("TCAS1ASF1_MFS.txt", false);
 		for (int[] tmpftc : ftcs) {
 			System.out.println(Arrays.toString(tmpftc));
@@ -130,8 +129,8 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void genCtsTest() throws IOException {
-		String path = "D:\\Files\\测试\\BoolExperiment\\CTS\\14_2_4.txt";
-		List<int[]> cts = Util.genCts(path);
+		DataHelper dataHelper = new DataHelper("D:/Files/测试/BoolExperiment");
+		List<int[]> cts = dataHelper.genCts(CtToolName.TCONFIG, 4, 4);
 		for (int[] tmptc : cts) {
 			System.out.println(Arrays.toString(tmptc));
 		}
@@ -160,14 +159,5 @@ public class CommonUtilsTest {
 		l.add(2);
 		System.out.println(Util.notContainsAnyOneOf(s, l));
 	}
-	
-	@Test
-	public void test() {
-		List<int[]> sches = Util.genDirectSubSchemas(new int[] {-1, -1, -1});
-		for (int[] sche : sches) {
-			System.out.println(Arrays.toString(sche));
-		}
-	}
-	
 	
 }

@@ -21,11 +21,7 @@ import baseimpl.Sri;
 import common.Configure;
 import common.CtToolName;
 import common.DataHelper;
-import common.LfName;
-import common.ResultHandler;
-import common.ResultType;
 import common.Util;
-import expe.Expe;
 import expe.LocateFaultFactory;
 import locatefault.BooleanExpressLocateFault;
 import locatefault.DeltaDebug;
@@ -36,7 +32,6 @@ import locatefault.Trt;
 
 public class FaultLocationTest {
 	private DataHelper dh;
-	private ResultHandler rh;
 	private int[] valuesOfEachParam;
 	private List<int[]> affFtcs;
 	private List<int[]> ftcs;
@@ -49,14 +44,10 @@ public class FaultLocationTest {
 	@Before
 	public void before() throws IOException {
 		String rootPath = "D:/Files/测试/BoolExperiment/";
-		String tcasFailtestPath = rootPath + "TCAS_FAILTEST/";
-		String tcasMfsPath = rootPath + "TCAS_MFS/";
-		String ctsPath = rootPath + "CTS/Tconfig/";
-		dh = new DataHelper(rootPath, tcasFailtestPath, tcasMfsPath, ctsPath);
-		rh = new ResultHandler(dh);
+		dh = new DataHelper(rootPath);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
-		List<int[]> cts = Util.genCts(ctsPath+valuesOfEachParam.length+"_2_4.txt");
+		List<int[]> cts = dh.genCts(CtToolName.TCONFIG, valuesOfEachParam.length, 4);
 		ptcs = Util.arrDiffSet(cts, affFtcs);
 		ftcs = Util.arrDiffSet(cts, ptcs);
 		extraTcs = new ArrayList<int[]>();
@@ -88,7 +79,6 @@ public class FaultLocationTest {
 	
 	@Test
 	public void schemaTreeTest() {
-		Expe.lenOfCt = 5;
 		faultLocate = new Trt(new CompleteScheTree(), new BFSSelectUnknowNode());
 	}
 	

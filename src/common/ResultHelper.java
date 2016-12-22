@@ -16,13 +16,13 @@ import java.util.List;
  * @author lglyoung
  *
  */
-public class ResultHandler {
+public class ResultHelper {
 	private double hrSum;		//命中率总和
 	private int numOfExtraTc;	//附加测试用例总和
-	private DataHelper dh;
+	private DataHelper dataHepler;
 	
-	public ResultHandler(DataHelper dh) {
-		this.dh = dh;
+	public ResultHelper(DataHelper dh) {
+		this.dataHepler = dh;
 	}
 	
 	public synchronized void sum(List<int[]> extraTcs, List<int[]> faultSchemas, double hr) {
@@ -48,7 +48,7 @@ public class ResultHandler {
 	public void saveResult(LfName lfName, CtToolName ctToolName, int lenOfCt, ResultType resultType,
 			String booleanExprName, List<int[]> ExtraTcsOrFss) throws IOException {
 		//保存结果的路径
-		String path = getResultFilePath(lfName.getName(), ctToolName, 
+		String path = getResultFilePath(lfName, ctToolName, 
 				lenOfCt, resultType, booleanExprName);
 		path = path.substring(0, path.lastIndexOf('/')+1);
 		
@@ -84,9 +84,9 @@ public class ResultHandler {
 	 * @param name 没有后缀的文件名，可以是布尔表达式名
 	 * @return
 	 */
-	private String getResultFilePath(String flName, CtToolName ctToolName, int lenOfCt,
+	private String getResultFilePath(LfName flName, CtToolName ctToolName, int lenOfCt,
 			ResultType resultType, String name) {
-		String path = dh.getRootPath()+"FL_RESULT/"+flName+"/"+ctToolName.getName()+"/"
+		String path = dataHepler.getResultPath()+flName.getName()+"/"+ctToolName.getName()+"/"
 				+lenOfCt+"_ct/"+resultType.getName()+"/"+name+".txt";
 		return path;
 	}
@@ -107,6 +107,30 @@ public class ResultHandler {
 		}
 		br.close();
 		return strs;
+	}
+	
+	/**
+	 * 保存附加测试用例的数量
+	 * @param booleanExprName
+	 * @param size
+	 * @throws IOException 
+	 */
+	public synchronized void saveExtraTcSize(LfName flName, CtToolName ctToolName, int lenOfCt, 
+			String booleanExprName, int size) throws IOException {
+		String absolutePath = getResultFilePath(flName, ctToolName, lenOfCt, ResultType.ExtraTc, "size");
+		
+		//创建BufferedWriter
+		File f = new File(absolutePath);
+		if (!f.exists()) {
+			f.createNewFile();
+		}
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(f, true), "UTF-8"));		//追加
+		bw.write(booleanExprName+":"+size);
+		bw.newLine();
+		
+		//关闭BufferedWriter
+		bw.close();
 	}
 	
 }

@@ -1,10 +1,5 @@
 package common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +15,6 @@ import java.util.Set;
 
 import base.ILocateFixedParam;
 import entries.SchemaNode;
-import locatefault.BooleanExpressLocateFault;
 
 public class Util {
 	/**
@@ -540,38 +534,6 @@ public class Util {
 		return at;
 	}
 	
-	/**
-	 * 将一个txt文件的内容转成int[]类型的数组，即组合测试 用例集
-	 * @return
-	 * @throws IOException 
-	 */
-	public static List<int[]> genCts(String path) throws IOException {
-		List<int[]> cts = new ArrayList<int[]>();
-		
-		//根据文件名获取测试用例的长度
-		File f = new File(path);
-		int numsOfParam = Integer.parseInt(f.getName().split("_")[0]);
-		
-		FileInputStream fi = new FileInputStream(path);
-		BufferedReader br = new BufferedReader(new InputStreamReader(fi, "utf-8"));
-		String line = br.readLine();
-		while (line != null) {
-			String tmpStr = line.split("\\|")[1].replaceAll(" ", "");
-			int[] tmpCt = new int[numsOfParam];
-			for (int i = 0; i < numsOfParam; i++) {
-				if (tmpStr.charAt(i) == '-') {			//用0表示'-'
-					tmpCt[i] = 0;
-				} else {
-					tmpCt[i] = Integer.parseInt(tmpStr.substring(i, i+1))-1;
-				}
-			}
-			cts.add(tmpCt);
-			line = br.readLine();
-		}
-		br.close();
-		return cts;
-	}
-
 	/**
 	 * 将List<int[]>重复的元素进行过滤
 	 * @param intArrList
