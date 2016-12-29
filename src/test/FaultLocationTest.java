@@ -2,6 +2,7 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -108,10 +109,15 @@ public class FaultLocationTest {
 		
 		//移除重复的附加测试用例
 		Util.delRepeat(extraTcs);
+		Util.delRepeat(faultSchemas);
 		
 		//附加测试用例数
 		System.out.println("附加测试用例数：" + extraTcs.size());	
+		System.out.println("故障模式数：" + faultSchemas.size());
 		
+		for (int[] t : faultSchemas) {
+			System.out.println(Arrays.toString(t));
+		}
 	}
 	
 }

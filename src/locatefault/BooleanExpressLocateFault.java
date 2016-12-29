@@ -34,7 +34,7 @@ public class BooleanExpressLocateFault implements ILocateFault {
 			boolean isMFS = true;			//如果有一个直接子模式不是健康模式，则isMFS = false;
 			queue.clear();
 			queue.offer(ftc);
-			Map<String, String> m = new HashMap<String, String>();
+			Map<String, Boolean> m = new HashMap<String, Boolean>();	//保存已经处理过的模式，值为true表示健康
 			while (!queue.isEmpty()) {
 				isMFS = true;
 				int[] pollSche = queue.poll();
@@ -42,7 +42,7 @@ public class BooleanExpressLocateFault implements ILocateFault {
 				for (int[] subSche : directSubSches) {
 					String subScheStr = Util.intArrayToStr(subSche);
 					if (!m.containsKey(subScheStr)) {
-						m.put(subScheStr, subScheStr);
+						m.put(subScheStr, true);
 						boolean isPassSche = Util.isPassSche(subSche, passExtraTcs);
 						
 						//如果当前子模式无法通过已有的附加测试用例和通过测试用例来确定是健康模式，则生成附加测试用例，如果生成的附加测试用例是失效测试用例，则该模式一定是故障模式
@@ -53,16 +53,20 @@ public class BooleanExpressLocateFault implements ILocateFault {
 								queue.offer(subSche);	//入列	
 								Util.addFailTc(extraTc, ftcs, ftcsSet);	//将发现到的新的附加测试用例添加到失效测试用例集中
 								isMFS = false;			//只要有一个子模式是故障模式，那么当前出对列的故障模式就不是极小故障模式
+								m.put(subScheStr, false);
 							} else {
 								passExtraTcs.add(extraTc);				
 							}
-						}						
+						}
+					} else {
+						if (!m.get(subScheStr)) isMFS = false;
 					}
 				}
 				
 				//如果当前出对列的故障模式是极小故障模式，则保存
 				if (isMFS) 
 					faultSchemas.add(pollSche); 
+				
 			}
 		}
 	}
