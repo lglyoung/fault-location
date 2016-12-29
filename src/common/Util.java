@@ -545,47 +545,6 @@ public class Util {
 	}
 	
 	/**
-	 * 计算极小故障模式的命中率
-	 * @param allMfs
-	 * @param hitMfs
-	 * @return
-	 */
-	public static double hitRate(List<int[]> allMfs, List<int[]> hitMfs) {
-		double count = 0;
-		for (int[] tmpmfs : allMfs) {
-			for (int[] tmphit : hitMfs) {
-				if (Arrays.equals(tmpmfs, tmphit)) {
-					count++;
-					break;
-				}
-			}
-		}
-		return count / allMfs.size();
-	}
-	
-	/**
-	 * 计算极小故障模式的非命中率
-	 * @param allMfs
-	 * @param hitMfs
-	 * @return
-	 */
-	public static double notHitRate(List<int[]> allMfs, List<int[]> hitMfs) {
-		double count = 0;
-		boolean isIn = false;
-		for (int[] tmpmfs : hitMfs) {
-			isIn = false;
-			for (int[] tmphit : allMfs) {
-				if (Arrays.equals(tmpmfs, tmphit)) {
-					isIn = true;
-					break;
-				}
-			}
-			if (!isIn) count++;
-		}
-		return count / allMfs.size();
-	}
-	
-	/**
 	 * all集合不包含sub的任一元素时，返回true
 	 * @param all
 	 * @param sub

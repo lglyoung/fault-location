@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -151,13 +152,10 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void notContainAnyOneOf() {
-		Set<Integer> s = new HashSet<Integer>();
-		List<Integer> l = new ArrayList<Integer>();
-		s.add(1);
-		s.add(3);
-		l.add(4);
-		l.add(2);
-		System.out.println(Util.notContainsAnyOneOf(s, l));
+		double d = 2.3456;
+		BigDecimal bd = new BigDecimal(d);
+		bd = bd.setScale(1, RoundingMode.HALF_UP);
+		System.out.println(bd.doubleValue());
 	}
 	
 }

@@ -109,15 +109,6 @@ public class FaultLocationTest {
 		//移除重复的附加测试用例
 		Util.delRepeat(extraTcs);
 		
-		//计算命中率
-		System.out.println("命中率："+
-				Util.hitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));
-		
-		//不命中率
-		//Util.removeParentSche(faultSchemas);
-		System.out.println("错误率："+
-				Util.notHitRate(dh.getAllFtcsOrMfs(curBoolExp+"_MFS.txt", false), faultSchemas));		
-		
 		//附加测试用例数
 		System.out.println("附加测试用例数：" + extraTcs.size());	
 		

@@ -8,10 +8,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import base.IHandler;
-import baseimpl.SaveHandler;
+import baseimpl.ResultHandler;
 import common.CtToolName;
 import common.DataHelper;
 import common.LfName;
+import common.ResultHelper;
 import entries.Param;
 
 public class Expe {
@@ -22,24 +23,30 @@ public class Expe {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
-		DataHelper dataHelper = new DataHelper("D:/Files/测试/BoolExperiment/");	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径
+		DataHelper dataHelper = new DataHelper(System.getProperty("user.dir"));	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径;"D:/Files/测试/BoolExperiment/"
 		
 		System.out.println("starting...");
 		
 		//关键调用
 		LfName[] lfNames = LfName.values();
-		int[] lenOfCts = {2, 3};
+		int[] lenOfCts = {2, 3, 4};
 		Param param = new Param();
-		IHandler saveHandler = new SaveHandler();	//保存中间数据handler
-		for (LfName lfName : lfNames) {
+		IHandler handler = new ResultHandler();		//保存或读取中间数据的handler
+		for (int i = 0; i < lfNames.length; i++) {
+			LfName lfName = lfNames[i];
 			System.out.println(lfName.getName());
 			for (int lenOfCt : lenOfCts) {
-				param.set(saveHandler, LocateFaultFactory.getProxyInstance(lfName.getName()), 
+				param.set(handler, LocateFaultFactory.getProxyInstance(lfName.getName()), 
 						dataHelper, lfName, CtToolName.TCONFIG, lenOfCt);
 				doExpe(param);
 			}
 		}
-
+		
+		//打印结果
+		if (handler instanceof ResultHandler) {
+			ResultHelper resultHelper = ((ResultHandler) handler).getResultHelper();
+			resultHelper.showAvg(resultHelper.getRecallMap(), param.getDataHepler().getTcasFailtestFileNames().size());
+		}
 	}
 	
 	/**
@@ -50,7 +57,7 @@ public class Expe {
 	public static void doExpe(Param param) throws IOException, InterruptedException {
 		int numOfProcessor = Runtime.getRuntime().availableProcessors();
 		//阻塞队列，存放布尔表达式文件名
-		BlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(param.getDataHepler().getTcasFailtestFileNames().subList(0, 100));
+		BlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(param.getDataHepler().getTcasFailtestFileNames());
 		Runnable[] runners = new Runnable[numOfProcessor+1];
 		ExecutorService es = Executors.newFixedThreadPool(numOfProcessor+1);
 		

@@ -22,6 +22,7 @@ public class HandleOneSutRunable implements Runnable {
 	public void run() {
 		String fcasFailtestFileName = blockingQueue.poll();
 		for (; fcasFailtestFileName != null; fcasFailtestFileName = blockingQueue.poll()) {
+			//保存中间结果或者读取中间结果
 			param.getHandler().handle(param, fcasFailtestFileName);
 		}
 	}

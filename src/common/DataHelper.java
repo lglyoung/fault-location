@@ -243,7 +243,7 @@ public class DataHelper {
 	 * @param name 没有后缀的文件名，可以是布尔表达式名
 	 * @return
 	 */
-	private String getResultFilePath(LfName flName, CtToolName ctToolName, int lenOfCt,
+	public String getResultFilePath(LfName flName, CtToolName ctToolName, int lenOfCt,
 			ResultType resultType, String name) {
 		String path = resultPath+flName.getName()+"/"+ctToolName.getName()+"/"
 				+lenOfCt+"_ct/"+resultType.getName()+"/"+name+".txt";
@@ -291,4 +291,18 @@ public class DataHelper {
 		//关闭BufferedWriter
 		bw.close();
 	}
+	
+	/**
+	 * 读取附加测试用例的数量
+	 * @param flName
+	 * @param ctToolName
+	 * @param lenOfCt
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> readExtraTcSize(LfName flName, CtToolName ctToolName, int lenOfCt) throws IOException {
+		String absolutePath = getResultFilePath(flName, ctToolName, lenOfCt, ResultType.ExtraTc, "size");
+		return readFileLineByLine(absolutePath, "utf-8");
+	}
+	
 }
