@@ -1,6 +1,7 @@
 package common;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +80,7 @@ public class ResultHelper {
 	 * 展示对象为每一个原始布尔表达式的实验结果
 	 * @param map 
 	 */
-	public void showEachSourceExpr(Map<String, Double> map) {
+	public List<String> showEachSourceExpr(Map<String, Double> map) {
 		Map<String, Double> m1 = new TreeMap<String, Double>();	//保存每个原始布尔表达式的总的附加测试用例数
 		Map<String, Double> m2 = new TreeMap<String, Double>();	//保存每个原始布尔表达式的变异体的个数
 		
@@ -96,10 +97,12 @@ public class ResultHelper {
 		}
 		
 		//遍历
+		List<String> res = new ArrayList<String>();
 		Set<Entry<String, Double>> set = m1.entrySet();
 		for (Entry<String, Double> en : set) {
-			System.out.println(en.getKey()+":"+en.getValue()/m2.get(en.getKey()));
+			res.add(en.getKey()+":"+en.getValue()/m2.get(en.getKey()));
 		}
+		return res;
 	}
 	
 	/**
@@ -107,22 +110,25 @@ public class ResultHelper {
 	 * @param map
 	 * @param size
 	 */
-	public void showAvg(Map<String, Double> map, int size) {
+	public List<String> showAvg(Map<String, Double> map, int size) {
 		Map<String, Double> m1 = new TreeMap<String, Double>();
 		Set<Entry<String, Double>> s = map.entrySet();
 		for (Entry<String, Double> en : s) {
 			if (en.getValue() != -1) {			//剔除掉extraTcSizeMap中值为-1的键值对
 				String key = en.getKey();
 				key = key.substring(0, key.lastIndexOf(':'));
+				key = key + ":";				//保证key的格式一致，如xx:xx:xx:xx
 				m1.put(key, m1.containsKey(key) ? en.getValue()+m1.get(key) : en.getValue());	//值累加
 			}
 		}
 		
 		//求平均，并显示
+		List<String> res = new ArrayList<String>();
 		Set<Entry<String, Double>> set = m1.entrySet();
 		for (Entry<String, Double> en : set) {
-			System.out.println(en.getKey()+":"+en.getValue()/size);
+			res.add(en.getKey()+":"+en.getValue()/size);
 		}
+		return res;
 	}
 	
 	
@@ -149,7 +155,7 @@ public class ResultHelper {
 	 * @return
 	 */
 	public String genKey(LfName lfName, CtToolName ctToolName, int lenOfCt, ResultType resultType) {
-		return lfName.getName()+":"+ctToolName.getName()+":"+lenOfCt+":"+resultType.getName();
+		return lenOfCt+":"+lfName.getName()+":"+ctToolName.getName()+":"+resultType.getName();
 	}
 	
 	/**

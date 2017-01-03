@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import base.IHandler;
 import baseimpl.ResultHandler;
+import baseimpl.SaveHandler;
 import common.CtToolName;
 import common.DataHelper;
 import common.LfName;
 import common.ResultHelper;
+import common.Util;
 import entries.Param;
 
 public class Expe {
@@ -23,6 +25,21 @@ public class Expe {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
+		//根据第一个参数创建handler
+		IHandler handler = null; 
+		if (args.length == 0) {
+			System.err.println("请输入handler！savehandler or resulthandler");
+			return;
+		}
+		if (args[0].equals("savehandler")) {
+			handler = new SaveHandler();		//保存或读取中间数据的handler
+		} else if (args[0].equals("resulthandler")) {
+			handler = new ResultHandler();		//保存或读取中间数据的handler
+		} else {
+			System.err.println("请输入正确的handler名！savehandler or resulthandler");
+			return;
+		}
+		
 		DataHelper dataHelper = new DataHelper(System.getProperty("user.dir"));	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径;"D:/Files/测试/BoolExperiment/"
 		
 		System.out.println("starting...");
@@ -31,7 +48,8 @@ public class Expe {
 		LfName[] lfNames = LfName.values();
 		int[] lenOfCts = {2, 3, 4};
 		Param param = new Param();
-		IHandler handler = new ResultHandler();		//保存或读取中间数据的handler
+		
+		//遍历
 		for (int i = 0; i < lfNames.length; i++) {
 			LfName lfName = lfNames[i];
 			System.out.println(lfName.getName());
@@ -45,7 +63,31 @@ public class Expe {
 		//打印结果
 		if (handler instanceof ResultHandler) {
 			ResultHelper resultHelper = ((ResultHandler) handler).getResultHelper();
-			resultHelper.showAvg(resultHelper.getRecallMap(), param.getDataHepler().getTcasFailtestFileNames().size());
+			
+			//附加测试用例
+			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getExtraTcSizeMap()), false);
+			Util.formateShowResult(
+					resultHelper.showAvg(resultHelper.getExtraTcSizeMap(), dataHelper.getTcasFailtestFileNames().size())
+					, false);
+					
+			//recall
+			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getRecallMap()), true);
+			Util.formateShowResult(
+					resultHelper.showAvg(resultHelper.getRecallMap(), dataHelper.getTcasFailtestFileNames().size())
+					, true);
+
+			
+			//percision
+			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getPrecisionMap()), true);
+			Util.formateShowResult(
+					resultHelper.showAvg(resultHelper.getPrecisionMap(), dataHelper.getTcasFailtestFileNames().size())
+					, true);
+			
+			//f
+			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getfMeasureMap()), true);
+			Util.formateShowResult(
+					resultHelper.showAvg(resultHelper.getfMeasureMap(), dataHelper.getTcasFailtestFileNames().size())
+					, true);
 		}
 	}
 	
@@ -67,7 +109,9 @@ public class Expe {
 			es.submit(runners[i]);
 		}
 		es.shutdown();
-		es.awaitTermination(30, TimeUnit.DAYS);
+		if(!es.awaitTermination(30, TimeUnit.DAYS)) {
+			System.out.println("ExecutorService: timeout elapsed before termination");
+		}
 	}
 	
 }

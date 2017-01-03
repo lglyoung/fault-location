@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,11 +18,9 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
-import base.ILocateFault;
 import common.CtToolName;
 import common.DataHelper;
 import common.Util;
-import locatefault.IterAIFL;
 
 public class CommonUtilsTest {
 	@Test
@@ -146,16 +142,26 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void className() {
-		ILocateFault ia = new IterAIFL();
-		System.out.println(ia.getClass().getSimpleName());
+		String[] tmp = "a::b".split(":");
+		System.out.println(tmp.length);
+		System.out.printf("%-10s%-10s%-10.2f", tmp[1], "b", Double.parseDouble("10.235"));
+		System.err.println();
+		System.out.printf("%-10s%-10s%-10.2f", tmp[1], "b", Double.parseDouble("10.235"));
 	}
 	
 	@Test
 	public void notContainAnyOneOf() {
-		double d = 2.3456;
-		BigDecimal bd = new BigDecimal(d);
-		bd = bd.setScale(1, RoundingMode.HALF_UP);
-		System.out.println(bd.doubleValue());
+		String[] strs = {
+						"BELF:TCONFIG:2:FaultSche:0.11208870887769184", 
+						"BELF:TCONFIG:3:FaultSche:0.19143735502252657",
+						
+						"BFSTRT:TCONFIG:2:FaultSche:0.06131934723571126",
+						"BFSTRT:TCONFIG:3:FaultSche:0.11747277908504335",
+					
+						};
+		Util.formateShowResult(Arrays.asList(strs), false);
 	}
+	
+	
 	
 }

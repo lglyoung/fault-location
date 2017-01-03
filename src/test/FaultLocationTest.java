@@ -2,7 +2,6 @@ package test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -39,7 +38,7 @@ public class FaultLocationTest {
 	private List<int[]> ptcs;
 	private List<int[]> extraTcs;
 	private List<int[]> faultSchemas;
-	private String curBoolExp = "TCAS12LRF85";//"TCAS12LRF85";TCAS20ASF2
+	private String curBoolExp = "TCAS20CCF267";//"TCAS12LRF85";TCAS20ASF2
 	private ILocateFault faultLocate;
 	
 	@Before
@@ -115,8 +114,14 @@ public class FaultLocationTest {
 		System.out.println("附加测试用例数：" + extraTcs.size());	
 		System.out.println("故障模式数：" + faultSchemas.size());
 		
+		System.out.println("附加测试用例：");
+		for (int[] t : extraTcs) {
+			System.out.println(Util.intArrayToStr(t));
+		}
+		
+		System.out.println("故障模式：");
 		for (int[] t : faultSchemas) {
-			System.out.println(Arrays.toString(t));
+			System.out.println(Util.intArrayToStr(t));
 		}
 	}
 	
