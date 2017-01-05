@@ -722,33 +722,6 @@ public class Util {
 		bd = bd.setScale(n, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
-	
-	/**
-	 * 结果格式化
-	 * @param strs
-	 * @param isPercentage是否是百分数
-	 * @return
-	 */
-	public static void formateShowResult(List<String> strs, boolean isPercentage) {
-		for (String s : strs) {
-			String[] tmpStrs = s.split(":");
-			for (int i = 0; i < tmpStrs.length; i++) {
-				if (i != tmpStrs.length-1) {
-					if (i == 0) {
-						System.out.printf("%-5s", tmpStrs[i]);
-					} else if (i == 1) {
-						System.out.printf("%-30s", tmpStrs[i]);
-					} else {
-						System.out.printf("%-15s", tmpStrs[i]);
-					}
-					
-				} else {
-					System.out.printf("%-15.2f", isPercentage ? Double.parseDouble(tmpStrs[i])*100 : Double.parseDouble(tmpStrs[i]));
-					System.out.println();
-				}
-			}
-		}
-	} 
 
 }
 

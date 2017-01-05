@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import common.CtToolName;
 import common.DataHelper;
+import common.ResultHelper;
 import common.Util;
 
 public class CommonUtilsTest {
@@ -159,7 +160,7 @@ public class CommonUtilsTest {
 						"BFSTRT:TCONFIG:3:FaultSche:0.11747277908504335",
 					
 						};
-		Util.formateShowResult(Arrays.asList(strs), false);
+		ResultHelper.formateShowResult(Arrays.asList(strs), false);
 	}
 	
 	

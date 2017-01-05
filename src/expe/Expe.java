@@ -14,7 +14,6 @@ import common.CtToolName;
 import common.DataHelper;
 import common.LfName;
 import common.ResultHelper;
-import common.Util;
 import entries.Param;
 
 public class Expe {
@@ -65,27 +64,27 @@ public class Expe {
 			ResultHelper resultHelper = ((ResultHandler) handler).getResultHelper();
 			
 			//附加测试用例
-			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getExtraTcSizeMap()), false);
-			Util.formateShowResult(
+			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getExtraTcSizeMap()), false);
+			ResultHelper.formateShowResult(
 					resultHelper.showAvg(resultHelper.getExtraTcSizeMap(), dataHelper.getTcasFailtestFileNames().size())
 					, false);
 					
 			//recall
-			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getRecallMap()), true);
-			Util.formateShowResult(
+			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getRecallMap()), true);
+			ResultHelper.formateShowResult(
 					resultHelper.showAvg(resultHelper.getRecallMap(), dataHelper.getTcasFailtestFileNames().size())
 					, true);
 
 			
 			//percision
-			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getPrecisionMap()), true);
-			Util.formateShowResult(
+			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getPrecisionMap()), true);
+			ResultHelper.formateShowResult(
 					resultHelper.showAvg(resultHelper.getPrecisionMap(), dataHelper.getTcasFailtestFileNames().size())
 					, true);
 			
 			//f
-			Util.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getfMeasureMap()), true);
-			Util.formateShowResult(
+			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getfMeasureMap()), true);
+			ResultHelper.formateShowResult(
 					resultHelper.showAvg(resultHelper.getfMeasureMap(), dataHelper.getTcasFailtestFileNames().size())
 					, true);
 		}

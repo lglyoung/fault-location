@@ -131,6 +131,34 @@ public class ResultHelper {
 		return res;
 	}
 	
+	/**
+	 * 结果格式化
+	 * @param strs
+	 * @param isPercentage是否是百分数
+	 * @return
+	 */
+	public static void formateShowResult(List<String> strs, boolean isPercentage) {
+		for (String s : strs) {
+			String[] tmpStrs = s.split(":");
+			for (int i = 0; i < tmpStrs.length; i++) {
+				if (i != tmpStrs.length-1) {
+					if (i == 0) {
+						System.out.printf("%-5s", tmpStrs[i]);
+					} else if (i == 1) {
+						System.out.printf("%-30s", tmpStrs[i]);
+					} else {
+						System.out.printf("%-15s", tmpStrs[i]);
+					}
+					
+				} else {
+					System.out.printf("%-15.2f", isPercentage ? Double.parseDouble(tmpStrs[i])*100 : Double.parseDouble(tmpStrs[i]));
+					System.out.println();
+				}
+			}
+		}
+	} 
+
+	
 	
 	/**
 	 * 从变异体名中获取原始版本的布尔表达式名
@@ -184,7 +212,7 @@ public class ResultHelper {
 	 * @return
 	 */
 	private double recall(double hitNum, double allNum) {
-		return hitNum / allNum;
+		return allNum == 0 ? 0 : hitNum / allNum;
 	}
 	
 	/**
@@ -194,7 +222,7 @@ public class ResultHelper {
 	 * @return
 	 */
 	private double percision(double hitNum, double allSuspNum) {
-		return hitNum == 0 ? 0 : hitNum / allSuspNum;
+		return allSuspNum == 0 ? 0 : hitNum / allSuspNum;
 	}
 	
 	/**
