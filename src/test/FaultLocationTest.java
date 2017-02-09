@@ -19,7 +19,7 @@ import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
 import common.Configure;
-import common.CtToolName;
+import common.CtToolNameEnum;
 import common.DataHelper;
 import common.Util;
 import expe.LocateFaultFactory;
@@ -47,7 +47,7 @@ public class FaultLocationTest {
 		dh = new DataHelper(rootPath);
 		valuesOfEachParam = dh.getValuesOfEachParam(curBoolExp+".txt");
 		affFtcs = dh.getAllFtcsOrMfs(curBoolExp+".txt", true);
-		List<int[]> cts = dh.genCts(CtToolName.TCONFIG, valuesOfEachParam.length, 4);
+		List<int[]> cts = dh.genCts(CtToolNameEnum.TCONFIG, valuesOfEachParam.length, 4);
 		ptcs = Util.arrDiffSet(cts, affFtcs);
 		ftcs = Util.arrDiffSet(cts, ptcs);
 		extraTcs = new ArrayList<int[]>();

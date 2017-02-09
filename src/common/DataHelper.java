@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -155,7 +156,7 @@ public class DataHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<int[]> genCts(CtToolName ctToolName, int params, int lenOfCt) throws IOException {
+	public List<int[]> genCts(CtToolNameEnum ctToolName, int params, int lenOfCt) throws IOException {
 		//组合测试用例集路径
 		String ctpath = ctsPath+"/"+ctToolName.getName()+
 				"/"+params+"_2_"+lenOfCt+".txt";
@@ -204,7 +205,7 @@ public class DataHelper {
 	 * @param ResultType 结果的类型，附加测试用例还是故障模式
 	 * @throws IOException 
 	 */
-	public void saveResult(LfName lfName, CtToolName ctToolName, int lenOfCt, ResultType resultType,
+	public void saveResult(LfNameEnum lfName, CtToolNameEnum ctToolName, int lenOfCt, ResultType resultType,
 			String booleanExprName, List<int[]> ExtraTcsOrFss) throws IOException {
 		//保存结果的路径
 		String path = getResultFilePath(lfName, ctToolName, 
@@ -243,7 +244,7 @@ public class DataHelper {
 	 * @param name 没有后缀的文件名，可以是布尔表达式名
 	 * @return
 	 */
-	public String getResultFilePath(LfName flName, CtToolName ctToolName, int lenOfCt,
+	public String getResultFilePath(LfNameEnum flName, CtToolNameEnum ctToolName, int lenOfCt,
 			ResultType resultType, String name) {
 		String path = resultPath+flName.getName()+"/"+ctToolName.getName()+"/"
 				+lenOfCt+"_ct/"+resultType.getName()+"/"+name+".txt";
@@ -257,7 +258,7 @@ public class DataHelper {
 	 * @return
 	 * @throws IOException 
 	 */
-	public List<String> readFileLineByLine(String path, String charset) throws IOException {
+	public static List<String> readFileLineByLine(String path, String charset) throws IOException {
 		FileInputStream in = new FileInputStream(new File(path));
 		BufferedReader br = new BufferedReader(new InputStreamReader(in, charset));
 		List<String> strs = new ArrayList<String>();
@@ -269,12 +270,46 @@ public class DataHelper {
 	}
 	
 	/**
+	 * 将字符串数组一行一行得写入到文件中
+	 * @param path
+	 * @param strs
+	 * @param charset
+	 * @param isAppend 如果path这个文件存在，而且isAppend这个值为true，那么就将字符串数组写在该文件的末尾，即，追加
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public static void writeStrListLineByLine(String path, List<String> strs, String charset, boolean isAppend) throws IOException, FileNotFoundException {
+		//创建目录
+		File dir = new File(path.substring(0, path.lastIndexOf("/")));
+		if (!dir.exists()) dir.mkdirs();
+		
+		//创建BufferedWriter
+		File file = new File(path);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(file, isAppend), charset));
+		
+		//遍历List<int[]>，把数据写入到文件中
+		for (String s : strs) {
+			bw.write(s);
+			bw.newLine();
+		}
+		
+		//关闭BufferedWriter
+		bw.close();
+
+	}
+	
+	
+	/**
 	 * 保存附加测试用例的数量
 	 * @param booleanExprName
 	 * @param size
 	 * @throws IOException 
 	 */
-	public synchronized void saveExtraTcSize(LfName flName, CtToolName ctToolName, int lenOfCt, 
+	public synchronized void saveExtraTcSize(LfNameEnum flName, CtToolNameEnum ctToolName, int lenOfCt, 
 			String booleanExprName, int size) throws IOException {
 		String absolutePath = getResultFilePath(flName, ctToolName, lenOfCt, ResultType.ExtraTc, "size");
 		
@@ -300,7 +335,7 @@ public class DataHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<String> readExtraTcSize(LfName flName, CtToolName ctToolName, int lenOfCt) throws IOException {
+	public List<String> readExtraTcSize(LfNameEnum flName, CtToolNameEnum ctToolName, int lenOfCt) throws IOException {
 		String absolutePath = getResultFilePath(flName, ctToolName, lenOfCt, ResultType.ExtraTc, "size");
 		return readFileLineByLine(absolutePath, "utf-8");
 	}

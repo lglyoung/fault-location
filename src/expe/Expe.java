@@ -10,9 +10,11 @@ import java.util.concurrent.TimeUnit;
 import base.IHandler;
 import baseimpl.ResultHandler;
 import baseimpl.SaveHandler;
-import common.CtToolName;
+import common.CtToolNameEnum;
 import common.DataHelper;
-import common.LfName;
+import common.IndicatorEnum;
+import common.LfNameEnum;
+import common.ResultGroupEnum;
 import common.ResultHelper;
 import entries.Param;
 
@@ -44,17 +46,17 @@ public class Expe {
 		System.out.println("starting...");
 		
 		//关键调用
-		LfName[] lfNames = LfName.values();
+		LfNameEnum[] lfNames = LfNameEnum.values();
 		int[] lenOfCts = {2, 3, 4};
 		Param param = new Param();
 		
 		//遍历
 		for (int i = 0; i < lfNames.length; i++) {
-			LfName lfName = lfNames[i];
+			LfNameEnum lfName = lfNames[i];
 			System.out.println(lfName.getName());
 			for (int lenOfCt : lenOfCts) {
 				param.set(handler, LocateFaultFactory.getProxyInstance(lfName.getName()), 
-						dataHelper, lfName, CtToolName.TCONFIG, lenOfCt);
+						dataHelper, lfName, CtToolNameEnum.TCONFIG, lenOfCt);
 				doExpe(param);
 			}
 		}
@@ -62,31 +64,10 @@ public class Expe {
 		//打印结果
 		if (handler instanceof ResultHandler) {
 			ResultHelper resultHelper = ((ResultHandler) handler).getResultHelper();
-			
-			//附加测试用例
-			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getExtraTcSizeMap()), false);
-			ResultHelper.formateShowResult(
-					resultHelper.showAvg(resultHelper.getExtraTcSizeMap(), dataHelper.getTcasFailtestFileNames().size())
-					, false);
-					
-			//recall
-			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getRecallMap()), true);
-			ResultHelper.formateShowResult(
-					resultHelper.showAvg(resultHelper.getRecallMap(), dataHelper.getTcasFailtestFileNames().size())
-					, true);
-
-			
-			//percision
-			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getPrecisionMap()), true);
-			ResultHelper.formateShowResult(
-					resultHelper.showAvg(resultHelper.getPrecisionMap(), dataHelper.getTcasFailtestFileNames().size())
-					, true);
-			
-			//f
-			ResultHelper.formateShowResult(resultHelper.showEachSourceExpr(resultHelper.getfMeasureMap()), true);
-			ResultHelper.formateShowResult(
-					resultHelper.showAvg(resultHelper.getfMeasureMap(), dataHelper.getTcasFailtestFileNames().size())
-					, true);
+			resultHelper.genBoxplotSourceData(resultHelper.getExtraTcSizeMap(), IndicatorEnum.EXTRA_TC, dataHelper, ResultGroupEnum.ALL);
+			resultHelper.genBoxplotSourceData(resultHelper.getRecallMap(), IndicatorEnum.RECALL, dataHelper, ResultGroupEnum.ALL);
+			resultHelper.genBoxplotSourceData(resultHelper.getPrecisionMap(), IndicatorEnum.PERCISION, dataHelper, ResultGroupEnum.ALL);
+			resultHelper.genBoxplotSourceData(resultHelper.getfMeasureMap(), IndicatorEnum.F_MEASURE, dataHelper, ResultGroupEnum.ALL);
 		}
 	}
 	
@@ -110,6 +91,8 @@ public class Expe {
 		es.shutdown();
 		if(!es.awaitTermination(30, TimeUnit.DAYS)) {
 			System.out.println("ExecutorService: timeout elapsed before termination");
+		} else {
+			System.out.println("ExecutorService: done");
 		}
 	}
 	

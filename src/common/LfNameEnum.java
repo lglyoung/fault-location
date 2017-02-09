@@ -5,7 +5,7 @@ package common;
  * @author lglyoung
  *
  */
-public enum LfName {
+public enum LfNameEnum {
 	//ITERAIFL算法
 	ITERAIFL(Configure.ITERAIFL),
 	
@@ -26,7 +26,7 @@ public enum LfName {
 	
 	private String name;
 	
-	private LfName(String name) {
+	private LfNameEnum(String name) {
 		this.name = name;
 	}
 
@@ -39,39 +39,39 @@ public enum LfName {
 	 * @param name
 	 * @return
 	 */
-	public static LfName getLfName(String name) {
+	public static LfNameEnum getLfName(String name) {
 		if (name.toUpperCase().equals(Configure.ITERAIFL.toUpperCase())) {
-			return LfName.ITERAIFL;
+			return LfNameEnum.ITERAIFL;
 		} else if (name.toUpperCase().equals(Configure.FIC.toUpperCase())) {
-			return LfName.FIC;
+			return LfNameEnum.FIC;
 		} else if (name.toUpperCase().equals(Configure.FIC_BS.toUpperCase())) {
-			return LfName.FIC_BS;
+			return LfNameEnum.FIC_BS;
 		} else if (name.toUpperCase().equals(Configure.FINOVLP.toUpperCase())) {
-			return LfName.FINOVLP;
+			return LfNameEnum.FINOVLP;
 		} else if (name.toUpperCase().equals(Configure.FINOVLP_BS.toUpperCase())) {
-			return LfName.FINOVLP_BS;
+			return LfNameEnum.FINOVLP_BS;
 		} else if (name.toUpperCase().equals(Configure.SIMPLIFICATION.toUpperCase())) {
-			return LfName.SIMPLIFICATION;
+			return LfNameEnum.SIMPLIFICATION;
 		} else if (name.toUpperCase().equals(Configure.RI.toUpperCase())) {
-			return LfName.RI;
+			return LfNameEnum.RI;
 		} else if (name.toUpperCase().equals(Configure.SRI.toUpperCase())) {
-			return LfName.SRI;
+			return LfNameEnum.SRI;
 		} else if (name.toUpperCase().equals(Configure.SIMPLIFICATION_MUL.toUpperCase())) {
-			return LfName.SIMPLIFICATION_MUL;
+			return LfNameEnum.SIMPLIFICATION_MUL;
 		} else if (name.toUpperCase().equals(Configure.RI_MUL.toUpperCase())) {
-			return LfName.RI_MUL;
+			return LfNameEnum.RI_MUL;
 		} else if (name.toUpperCase().equals(Configure.SRI_MUL.toUpperCase())) {
-			return LfName.SRI_MUL;
+			return LfNameEnum.SRI_MUL;
 		} else if (name.toUpperCase().equals(Configure.COMPLETE_DFSTRT.toUpperCase())) {
-			return LfName.COMPLETE_DFSTRT;
+			return LfNameEnum.COMPLETE_DFSTRT;
 		} else if (name.toUpperCase().equals(Configure.COMPLETE_BFSTRT.toUpperCase())) {
-			return LfName.COMPLETE_BFSTRT;
+			return LfNameEnum.COMPLETE_BFSTRT;
 		} else if (name.toUpperCase().equals(Configure.COMPLETE_LPTRT.toUpperCase())) {
-			return LfName.COMPLETE_LPTRT;
+			return LfNameEnum.COMPLETE_LPTRT;
 		/*} else if (name.toUpperCase().equals(Configure.COMPLETE_GREEDTRT.toUpperCase())) {
 			return LfName.COMPLETE_GREEDTRT;*/
 		} else if (name.toUpperCase().equals(Configure.BELF.toUpperCase())) {
-			return LfName.BELF;
+			return LfNameEnum.BELF;
 		}
 		return null;
 	}

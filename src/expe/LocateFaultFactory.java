@@ -10,7 +10,7 @@ import baseimpl.LocateFixedParam;
 import baseimpl.Ri;
 import baseimpl.Simplification;
 import baseimpl.Sri;
-import common.LfName;
+import common.LfNameEnum;
 import locatefault.BooleanExpressLocateFault;
 import locatefault.DeltaDebug;
 import locatefault.DeltaDebugMul;
@@ -32,7 +32,7 @@ public class LocateFaultFactory {
 	 */
 	public static ILocateFault getProxyInstance(String name) {
 		ILocateFault lf = null;
-		LfName lfNameEnum = LfName.getLfName(name);
+		LfNameEnum lfNameEnum = LfNameEnum.getLfName(name);
 		if (lfNameEnum == null) {
 			throw new RuntimeException("ERROR: 没有"+name+"故障定位方法，可能是字符串写错了");
 		}

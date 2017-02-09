@@ -12,15 +12,17 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import common.CtToolName;
+import common.CtToolNameEnum;
 import common.DataHelper;
-import common.ResultHelper;
 import common.Util;
 
 public class CommonUtilsTest {
@@ -128,7 +130,7 @@ public class CommonUtilsTest {
 	@Test
 	public void genCtsTest() throws IOException {
 		DataHelper dataHelper = new DataHelper("D:/Files/测试/BoolExperiment");
-		List<int[]> cts = dataHelper.genCts(CtToolName.TCONFIG, 4, 4);
+		List<int[]> cts = dataHelper.genCts(CtToolNameEnum.TCONFIG, 4, 4);
 		for (int[] tmptc : cts) {
 			System.out.println(Arrays.toString(tmptc));
 		}
@@ -143,26 +145,24 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void className() {
-		String[] tmp = "a::b".split(":");
-		System.out.println(tmp.length);
-		System.out.printf("%-10s%-10s%-10.2f", tmp[1], "b", Double.parseDouble("10.235"));
-		System.err.println();
-		System.out.printf("%-10s%-10s%-10.2f", tmp[1], "b", Double.parseDouble("10.235"));
+		Pattern p = Pattern.compile("(?<=[0-9]+)[A-Z]+(?=[0-9]+)");
+		Matcher m = p.matcher("TCAS2CDF294");
+		if (m.find()) {
+			System.out.println(m.group());
+		}
 	}
 	
 	@Test
-	public void notContainAnyOneOf() {
-		String[] strs = {
-						"BELF:TCONFIG:2:FaultSche:0.11208870887769184", 
-						"BELF:TCONFIG:3:FaultSche:0.19143735502252657",
-						
-						"BFSTRT:TCONFIG:2:FaultSche:0.06131934723571126",
-						"BFSTRT:TCONFIG:3:FaultSche:0.11747277908504335",
-					
-						};
-		ResultHelper.formateShowResult(Arrays.asList(strs), false);
+	public void test1() {
+		String[] strs = {"str1", "str2", "str3"};
+		System.out.println(String.format("%-10s%-10s%-10s", (Object[]) strs));
 	}
 	
-	
+	@Test
+	public void test2() {
+		Set<String> s = new HashSet<String>();
+		s.add("str1");
+		System.out.println(s.toArray()[0]);
+	}
 	
 }
