@@ -160,9 +160,9 @@ public class CommonUtilsTest {
 	
 	@Test
 	public void test2() {
-		Set<String> s = new HashSet<String>();
-		s.add("str1");
-		System.out.println(s.toArray()[0]);
+		double a = 1;
+		double b = 3;
+		System.out.println(a / b);
 	}
 	
 }

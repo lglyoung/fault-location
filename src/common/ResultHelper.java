@@ -277,6 +277,35 @@ public class ResultHelper {
 	public Map<String, Double> getExtraTcSizeMap() {
 		return extraTcSizeMap;
 	}
+	
+	/**
+	 * 将附加测试用例数量转成百分比的形式：60 / 120 * 100 = 50(%)。这个“%”在显示的时候加上
+	 * @return
+	 * @throws IOException 
+	 */
+	public Map<String, Double> getPercentageExtraTcSizeMap(Param param, Map<String, Double> extraTcSizeMap) throws IOException {
+		DataHelper dataHelper = param.getDataHepler();
+		Map<String, Double> m = new HashMap<String, Double>();
+		for (Entry<String, Double> e : extraTcSizeMap.entrySet()) {
+			if (e.getValue() != -1) {
+				//计算当前变异体的所有的测试用例的数量
+				String[] keyParts = e.getKey().split(":");
+				String fileName = keyParts[keyParts.length-1]+".txt";
+				int[] s = dataHelper.getValuesOfEachParam(fileName);
+				int allTcNum = 1;	//变异体的所有的测试用例的数量
+				for (int i = 0; i < s.length; i++) {
+					allTcNum = allTcNum * s[i];
+				}
+				
+				//将转换后的数据保存到新的map中
+				m.put(e.getKey(), e.getValue() / allTcNum * 100);
+				
+			} else {
+				m.put(e.getKey(), e.getValue());
+			}
+		}
+		return m;
+	}
 
 	public Map<String, Double> getRecallMap() {
 		return recallMap;

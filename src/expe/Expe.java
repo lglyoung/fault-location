@@ -35,13 +35,13 @@ public class Expe {
 		if (args[0].equals("savehandler")) {
 			handler = new SaveHandler();		//保存或读取中间数据的handler
 		} else if (args[0].equals("resulthandler")) {
-			handler = new ResultHandler();		//保存或读取中间数据的handler
+			handler = new ResultHandler();		
 		} else {
 			System.err.println("请输入正确的handler名！savehandler or resulthandler");
 			return;
 		}
 		
-		DataHelper dataHelper = new DataHelper(System.getProperty("user.dir"));	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径;"D:/Files/测试/BoolExperiment/"
+		DataHelper dataHelper = new DataHelper("D:\\Files\\测试\\故障定位实验\\最终实验结果\\BoolExperimentAndFaultLocation");	//System.getProperty("user.dir")得到的是执行java -jar命令所在的路径;"D:/Files/测试/BoolExperiment/"
 		
 		System.out.println("starting...");
 		
@@ -64,10 +64,16 @@ public class Expe {
 		//打印结果
 		if (handler instanceof ResultHandler) {
 			ResultHelper resultHelper = ((ResultHandler) handler).getResultHelper();
-			resultHelper.genBoxplotSourceData(resultHelper.getExtraTcSizeMap(), IndicatorEnum.EXTRA_TC, dataHelper, ResultGroupEnum.ALL);
-			resultHelper.genBoxplotSourceData(resultHelper.getRecallMap(), IndicatorEnum.RECALL, dataHelper, ResultGroupEnum.ALL);
-			resultHelper.genBoxplotSourceData(resultHelper.getPrecisionMap(), IndicatorEnum.PERCISION, dataHelper, ResultGroupEnum.ALL);
-			resultHelper.genBoxplotSourceData(resultHelper.getfMeasureMap(), IndicatorEnum.F_MEASURE, dataHelper, ResultGroupEnum.ALL);
+			resultHelper.genBoxplotSourceData(resultHelper.getPercentageExtraTcSizeMap(param, resultHelper.getExtraTcSizeMap()), 
+					IndicatorEnum.EXTRA_TC, dataHelper, ResultGroupEnum.ALL);
+			resultHelper.genBoxplotSourceData(resultHelper.getPercentageExtraTcSizeMap(param, resultHelper.getExtraTcSizeMap()), 
+					IndicatorEnum.EXTRA_TC, dataHelper, ResultGroupEnum.EXPR);
+			resultHelper.genBoxplotSourceData(resultHelper.getPercentageExtraTcSizeMap(param, resultHelper.getExtraTcSizeMap()), 
+					IndicatorEnum.EXTRA_TC, dataHelper, ResultGroupEnum.MUTA);
+			
+//			resultHelper.genBoxplotSourceData(resultHelper.getRecallMap(), IndicatorEnum.RECALL, dataHelper, ResultGroupEnum.ALL);
+//			resultHelper.genBoxplotSourceData(resultHelper.getPrecisionMap(), IndicatorEnum.PERCISION, dataHelper, ResultGroupEnum.ALL);
+//			resultHelper.genBoxplotSourceData(resultHelper.getfMeasureMap(), IndicatorEnum.F_MEASURE, dataHelper, ResultGroupEnum.ALL);
 		}
 	}
 	
