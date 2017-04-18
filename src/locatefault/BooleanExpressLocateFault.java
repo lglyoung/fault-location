@@ -17,7 +17,7 @@ import common.Util;
  * 思路：	1、队列中保存的都是故障模式
  * 		2、出列时，生成所有的直接子模式 && 判断是否是极小故障模式
  * 		3、入列时，要判断当前模式是否是故障模式。#如何判断#。如果所有的直接子模式都是健康模式，则保存该极小故障模式。
- * @author lglyoung
+ * @author lglyoung 
  *
  */
 public class BooleanExpressLocateFault implements ILocateFault {
